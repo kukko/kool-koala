@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/kukko/kool-koala/compare/v1.0.3...v1.0.4) (2025-04-01)
+
+
+### Bug Fixes
+
+* **package:** handle bin completly ([85f2598](https://github.com/kukko/kool-koala/commit/85f259824e104944cce9585b2c6ef874be2db8bb))
+
 ## [1.0.3](https://github.com/kukko/kool-koala/compare/v1.0.2...v1.0.3) (2025-04-01)
 
 

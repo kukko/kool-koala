@@ -23,7 +23,7 @@ jobs:
         run: npm i
 
       - name: Run compile script
-        run: npm run compile
+        run: npm run compile-release
 
       - name: Publish package
         run: npm publish ./dist

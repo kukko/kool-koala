@@ -7,6 +7,7 @@ import ts from "gulp-typescript";
 import { dirname, join } from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { rimrafSync } from 'rimraf';
 
 const argv = yargs(hideBin(process.argv))
   .options({
@@ -22,20 +23,16 @@ function getPath(path: string) {
 }
 
 function getDistPath(): string {
-  return getPath(join(...(argv.production ? [".."] : []), "dist"));
+  return getPath("dist");
 }
 
 const tsProject = ts.createProject(getPath("tsconfig.json"));
 
-gulp.task("clean", () => {
-  return exec(
-    `node ../node_modules/rimraf/dist/commonjs/index.js ${getPath(
-      "dist"
-    )} ${getPath("maps")}`,
-    {
-      cwd: ".",
-    }
-  );
+gulp.task("clean", (done) => {
+  rimrafSync(getPath(
+    "dist"
+  ));
+  done();
 });
 
 gulp.task("compile-ts", () => {
@@ -67,10 +64,15 @@ gulp.task("copy-files", () => {
 
 gulp.task(
   "compile",
-  argv.production
-    ? gulp.series("compile-ts", "copy-files")
-    : gulp.series("compile-ts", "copy-files")
+  gulp.series("compile-ts", "copy-files")
 );
+
+gulp.task("swithch-to-production", (done) => {
+  argv.production = true;
+  done();
+});
+
+gulp.task("compile-release", gulp.series("swithch-to-production", "clean", "compile"));
 
 gulp.task("watch", () => {
   const sourceFolder = "src";

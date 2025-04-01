@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "gulp": "gulp",
+    "dev": "gulp --gulpfile build/gulpfile.ts dev",
     "compile": "gulp --gulpfile build/gulpfile.ts compile",
+    "compile-release": "gulp --gulpfile build/gulpfile.ts compile-release",
     "test": "echo \"\u001b[33mTests have to be specified...\u001b[0m\" && exit 0",
     "prepare": "husky"
   },

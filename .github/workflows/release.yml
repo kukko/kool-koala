@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - master  # csak a master branchra
+      - master
 
 jobs:
   release:

@@ -4,6 +4,8 @@
   "description": "Full-stack framework to create NodeJS applications on server side and Angular applications on the client side with ease.",
   "main": "index.js",
   "scripts": {
+    "gulp": "gulp",
+    "compile": "gulp --gulpfile build/gulpfile.ts compile",
     "test": "echo \"\u001b[33mTests have to be specified...\u001b[0m\" && exit 0",
     "prepare": "husky"
   },
@@ -20,9 +22,22 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "@types/gulp": "^4.0.17",
+    "@types/gulp-nodemon": "^0.0.37",
+    "@types/gulp-rename": "^2.0.6",
+    "@types/gulp-sourcemaps": "^0.0.38",
+    "@types/yargs": "^17.0.33",
     "commitizen": "^4.3.1",
     "cz-git": "^1.11.1",
-    "husky": "^9.1.7"
+    "gulp": "^5.0.0",
+    "gulp-nodemon": "^2.5.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "husky": "^9.1.7",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "yargs": "^17.7.2"
   },
   "config": {
     "commitizen": {

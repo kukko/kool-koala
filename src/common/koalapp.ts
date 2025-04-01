@@ -100,7 +100,7 @@ export class KoalApp<U extends AuthenticableEntity, P> {
     if (authHeader) {
       const token = authHeader.split(' ')[1];
       try {
-        context.state.user = jwt.verify(token, this.configuration.getJwtSecretKey());
+        context.state.user = jwt.verify(token, this.configuration.getJwtParameters().secretKey);
         await next();
       } catch (error) {
         context.status = StatusCode.UNAUTHORIZED;

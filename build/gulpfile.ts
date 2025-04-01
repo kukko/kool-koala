@@ -57,6 +57,7 @@ gulp.task("copy-files", () => {
       getPath("src/**/*.js"),
       getPath("src/**/example-*.ts"),
       getPath("package.json"),
+      getPath("README.md"),
     ]
     : [getPath("src/**/*.js"), getPath("src/**/example-*.ts")];
   return gulp.src(src).pipe(gulp.dest(getDistPath()));

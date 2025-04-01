@@ -28,9 +28,15 @@ export class KoalApp<U extends AuthenticableEntity, P> {
     return this.configuration;
   }
 
+  public getDatabaseConnection(): DataSource {
+    return this.databaseConnection;
+  }
+
   async initialize() {
     try {
       this.databaseConnection = await this.configuration.getDataSource().initialize();
+      await this.databaseConnection.runMigrations();
+      console.log("Database connection initialized.");
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');

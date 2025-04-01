@@ -24,6 +24,12 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
+    "@semantic-release/npm": "^12.0.1",
+    "@semantic-release/release-notes-generator": "^14.0.3",
     "@types/gulp": "^4.0.17",
     "@types/gulp-nodemon": "^0.0.37",
     "@types/gulp-rename": "^2.0.6",
@@ -38,6 +44,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "husky": "^9.1.7",
     "rimraf": "^6.0.1",
+    "semantic-release": "^24.2.3",
     "ts-node": "^10.9.2",
     "yargs": "^17.7.2"
   },

@@ -4,7 +4,8 @@
   "description": "Full-stack framework to create NodeJS applications on server side and Angular applications on the client side with ease.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"\u001b[33mTests have to be specified...\u001b[0m\" && exit 0",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,17 @@
   "bugs": {
     "url": "https://github.com/kukko/kool-koala/issues"
   },
-  "homepage": "https://github.com/kukko/kool-koala#readme"
+  "homepage": "https://github.com/kukko/kool-koala#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "commitizen": "^4.3.1",
+    "cz-git": "^1.11.1",
+    "husky": "^9.1.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-git"
+    }
+  }
 }

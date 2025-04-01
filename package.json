@@ -38,6 +38,7 @@
     "@types/gulp-nodemon": "^0.0.37",
     "@types/gulp-rename": "^2.0.6",
     "@types/gulp-sourcemaps": "^0.0.38",
+    "@types/koa": "^2.15.0",
     "@types/yargs": "^17.0.33",
     "commitizen": "^4.3.1",
     "cz-git": "^1.11.1",
@@ -56,5 +57,8 @@
     "commitizen": {
       "path": "./node_modules/cz-git"
     }
+  },
+  "peerDependencies": {
+    "koa": "^2.16.0"
   }
 }

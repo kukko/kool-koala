@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/kukko/kool-koala/compare/v1.0.0...v1.0.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* **build:** change semantic-release configuration ([8ae6d64](https://github.com/kukko/kool-koala/commit/8ae6d6489189891ab57e72db43f23748c71740bb))
+* **build:** do not run commitizen when commiting from the release workflow ([84e7a13](https://github.com/kukko/kool-koala/commit/84e7a13c75aeb7316e5303d9e3fa6d2046e1302a))
+* **build:** make header-max-length rule to only raise a warning instead of an error ([7347646](https://github.com/kukko/kool-koala/commit/7347646e3046261a54264f0dba51cd616b15e514))
+
 # 1.0.0 (2025-04-01)
 
 

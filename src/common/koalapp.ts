@@ -39,6 +39,9 @@ export class KoalApp<U extends AuthenticableEntity, P> {
       this.configuration.getControllers(),
       this.configuration.getUserRepository()
     );
+    this.koa
+      .use(this.routerService.getRoutes())
+      .use(this.routerService.allowedMethods());
 
     this.koa.listen(this.configuration.getPort(), () => {
       if (callback) {

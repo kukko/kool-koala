@@ -1,8 +1,10 @@
-import Koa from 'koa';
+import Koa, { Next, ParameterizedContext } from 'koa';
 import { Configuration } from './configuration';
 import { RouterService } from '../services/router-service';
 import { AuthenticableEntity } from '../types/entities/authenticable-entity';
 import { DataSource } from 'typeorm';
+import { StatusCode } from './status-code';
+import jwt from 'jsonwebtoken';
 
 export class KoalApp<U extends AuthenticableEntity, P> {
   private static instance: KoalApp<any, any>;
@@ -37,6 +39,8 @@ export class KoalApp<U extends AuthenticableEntity, P> {
       this.databaseConnection = await this.configuration.getDataSource().initialize();
       await this.databaseConnection.runMigrations();
       console.log("Database connection initialized.");
+      this.koa.use(this.authorizationHeaderParser.bind(this));
+      console.log("Authorization header parser initialized.");
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');
@@ -57,5 +61,25 @@ export class KoalApp<U extends AuthenticableEntity, P> {
         callback(this.configuration);
       }
     });
+  }
+
+  async authorizationHeaderParser(context: ParameterizedContext, next: Next) {
+    const authHeader = context.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.split(' ')[1];
+      try {
+        context.state.user = jwt.verify(token, this.configuration.getJwtSecretKey());
+        await next();
+      } catch (error) {
+        context.status = StatusCode.UNAUTHORIZED;
+        context.body = {
+          success: false,
+          message: 'Invalid token'
+        }
+      }
+    }
+    else {
+      await next();
+    }
   }
 }

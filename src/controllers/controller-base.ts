@@ -2,11 +2,8 @@ import Router from "koa-router";
 import { AuthorizationService } from "../services/authorization-service";
 import { AuthenticableEntity } from "../types/entities/authenticable-entity";
 
-export abstract class ControllerBase<
-  U extends AuthenticableEntity,
-  P
-> {
-  constructor(protected router: Router, protected authorizationService: AuthorizationService<U, P>) { }
+export abstract class ControllerBase {
+  constructor(protected router: Router) { }
   abstract registerEndpoints(): void;
   protected getApiUrl(path: string): string {
     if (path.startsWith("/")) {
@@ -18,7 +15,4 @@ export abstract class ControllerBase<
   }
 }
 
-export type ControllerConstructor<
-  U extends AuthenticableEntity,
-  P
-> = new (router: Router, authorizationService: AuthorizationService<U, P>) => ControllerBase<U, P>;
+export type ControllerConstructor = new (router: Router) => ControllerBase;

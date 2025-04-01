@@ -8,7 +8,7 @@ export interface DatabaseConfigurationParamters {
 }
 
 export interface ConfigurationParameters<U extends AuthenticableEntity, P> {
-  controllers: (ControllerConstructor<U, P>)[],
+  controllers: (ControllerConstructor)[],
   database?: DatabaseConfigurationParamters,
   jwt?: {
     saltRounds: number,

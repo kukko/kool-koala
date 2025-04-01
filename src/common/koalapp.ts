@@ -15,7 +15,7 @@ export class KoalApp<U extends AuthenticableEntity, P> {
   private static instance: KoalApp<any, any>;
 
   private koa = new Koa();
-  private routerService: RouterService<U, P>;
+  private routerService: RouterService;
   private databaseConnection: DataSource;
 
   private constructor(private configuration: Configuration<U, P>) {
@@ -81,8 +81,7 @@ export class KoalApp<U extends AuthenticableEntity, P> {
 
   async start(callback?: (configuration: Configuration<U, P>) => void) {
     this.routerService = new RouterService(
-      this.configuration.getControllers(),
-      this.configuration.getUserRepository()
+      this.configuration.getControllers()
     );
     this.koa
       .use(this.routerService.getRoutes())

@@ -11,7 +11,7 @@ interface JwtParameters {
 export class Configuration<U extends AuthenticableEntity, P> {
   private port = 8080;
   constructor(
-    private controllers: (ControllerConstructor<U, P>)[],
+    private controllers: (ControllerConstructor)[],
     private jwt: JwtParameters,
     private userRepository: Repository<U>,
     private database?: DatabaseConfigurationParamters,

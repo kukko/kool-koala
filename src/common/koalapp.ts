@@ -7,6 +7,9 @@ import { StatusCode } from './status-code';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'koa-bodyparser';
 import { BaseResponse, ErrorBase } from '../types';
+import serve from "koa-static";
+import path from "path";
+import fs from "fs";
 
 export class KoalApp<U extends AuthenticableEntity, P> {
   private static instance: KoalApp<any, any>;
@@ -47,10 +50,27 @@ export class KoalApp<U extends AuthenticableEntity, P> {
       console.log("Body parser initialized.");
       this.koa.use(this.errorHandler.bind(this));
       console.log("Error handler initialized.");
+      this.registerStaticFileServerMiddleware();
+      console.log("Static file server initialized.");
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');
     }
+  }
+
+  registerStaticFileServerMiddleware() {
+    this.koa.use(serve(path.join(__dirname, '../client', 'browser')));
+    this.koa.use(serve(path.join(__dirname, '../../static')));
+    this.koa.use(async (ctx, next) => {
+      const requestPath = ctx.request.path;
+
+      if (!requestPath.startsWith('/api') && !/\.[a-z]+$/.test(requestPath)) {
+        ctx.type = 'html';
+        ctx.body = fs.createReadStream(path.join(__dirname, '../client', 'browser', 'index.html'));
+      } else {
+        await next();
+      }
+    });
   }
 
   async start(callback?: (configuration: Configuration<U, P>) => void) {

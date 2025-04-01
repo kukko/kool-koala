@@ -42,6 +42,7 @@
     "@types/koa": "^2.15.0",
     "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-router": "^7.4.8",
+    "@types/koa-static": "^4.0.4",
     "@types/yargs": "^17.0.33",
     "commitizen": "^4.3.1",
     "cz-git": "^1.11.1",
@@ -68,6 +69,7 @@
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
-    "koa-bodyparser": "^4.4.1"
+    "koa-bodyparser": "^4.4.1",
+    "koa-static": "^5.0.0"
   }
 }

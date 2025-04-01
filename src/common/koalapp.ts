@@ -5,6 +5,8 @@ import { AuthenticableEntity } from '../types/entities/authenticable-entity';
 import { DataSource } from 'typeorm';
 import { StatusCode } from './status-code';
 import jwt from 'jsonwebtoken';
+import bodyParser from 'koa-bodyparser';
+import { BaseResponse, ErrorBase } from '../types';
 
 export class KoalApp<U extends AuthenticableEntity, P> {
   private static instance: KoalApp<any, any>;
@@ -41,6 +43,10 @@ export class KoalApp<U extends AuthenticableEntity, P> {
       console.log("Database connection initialized.");
       this.koa.use(this.authorizationHeaderParser.bind(this));
       console.log("Authorization header parser initialized.");
+      this.koa.use(bodyParser());
+      console.log("Body parser initialized.");
+      this.koa.use(this.errorHandler.bind(this));
+      console.log("Error handler initialized.");
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');
@@ -80,6 +86,27 @@ export class KoalApp<U extends AuthenticableEntity, P> {
     }
     else {
       await next();
+    }
+  }
+
+  async errorHandler(context: ParameterizedContext, next: Next) {
+    try {
+      await next();
+    } catch (error) {
+      if (error instanceof ErrorBase) {
+        context.status = error.getStatusCode();
+        context.body = <BaseResponse>{
+          success: false,
+          message: error.message
+        };
+      }
+      else {
+        console.log(error);
+        context.status = StatusCode.INTERNAL_SERVER_ERROR;
+        context.body = <BaseResponse>{
+          success: false
+        };
+      }
     }
   }
 }

@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/kukko/kool-koala/compare/v1.0.4...v1.0.5) (2025-04-01)
+
+
+### Bug Fixes
+
+* **package:** give executable permission to binary file ([312c25a](https://github.com/kukko/kool-koala/commit/312c25af2c0dfc9c21c0bb10a2d71a8751c1d812))
+
 ## [1.0.4](https://github.com/kukko/kool-koala/compare/v1.0.3...v1.0.4) (2025-04-01)
 
 

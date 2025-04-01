@@ -1,3 +1,11 @@
+## [1.0.7](https://github.com/kukko/kool-koala/compare/v1.0.6...v1.0.7) (2025-04-01)
+
+
+### Bug Fixes
+
+* **package:** move package.json from dist to root folder after publishing package ([9182fb9](https://github.com/kukko/kool-koala/commit/9182fb9b795c0446bf542ab048ba46e82a295720))
+* **refactor:** move koala to a separate file ([7b306d8](https://github.com/kukko/kool-koala/commit/7b306d8b52e270d11be1b8294836164fec9d7e55))
+
 ## [1.0.6](https://github.com/kukko/kool-koala/compare/v1.0.5...v1.0.6) (2025-04-01)
 
 

@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/kukko/kool-koala/compare/v1.0.5...v1.0.6) (2025-04-01)
+
+
+### Bug Fixes
+
+* **koala:** i had to make an important change to the koala ([8a96a72](https://github.com/kukko/kool-koala/commit/8a96a725bc178770854d2a6194ac11cdc802e189))
+
 ## [1.0.5](https://github.com/kukko/kool-koala/compare/v1.0.4...v1.0.5) (2025-04-01)
 
 

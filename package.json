@@ -1,0 +1,19 @@
+{
+  "name": "kool-koala",
+  "version": "0.1.0",
+  "description": "Full-stack framework to create NodeJS applications on server side and Angular applications on the client side with ease.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kukko/kool-koala.git"
+  },
+  "author": "kukko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kukko/kool-koala/issues"
+  },
+  "homepage": "https://github.com/kukko/kool-koala#readme"
+}

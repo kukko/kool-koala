@@ -1,11 +1,9 @@
 import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
-import { PermissionHolderEntity } from '../types/entities/permission-holder-entity';
 import { AuthorizationError } from '../types/errors/authorization-error';
-import { HumanIdentifiable } from '../types/entities/human-identifiable';
-import { IdentifiableEntity } from '../types/entities/identifiable';
+import { AuthenticableEntity } from '../types';
 
 export class AuthorizationService<
-  U extends IdentifiableEntity & PermissionHolderEntity & HumanIdentifiable,
+  U extends AuthenticableEntity,
   P
 > {
   constructor(private userRepository: Repository<U>) {

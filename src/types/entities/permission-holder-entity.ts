@@ -1,4 +1,4 @@
-import { IdentifiableEntity } from "./identifiable";
+import { IdentifiableEntity } from "./identifiable-entity";
 import { PermissionEntity } from "./permission-entity";
 
 export interface PermissionHolderEntity {

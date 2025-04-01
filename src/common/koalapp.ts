@@ -18,4 +18,24 @@ export class KoalApp {
     }
     return KoalApp.instance;
   }
+
+  public getConfiguration(): Configuration {
+    return this.configuration;
+  }
+
+  async initialize() {
+    try {
+    } catch (error) {
+      console.log("Error during database initialization...", error);
+      throw new Error('Error during application intialization...');
+    }
+  }
+
+  async start(callback?: (configuration: Configuration) => void) {
+    this.koa.listen(this.configuration.getPort(), () => {
+      if (callback) {
+        callback(this.configuration);
+      }
+    });
+  }
 }

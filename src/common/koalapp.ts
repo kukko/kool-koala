@@ -41,9 +41,15 @@ export class KoalApp<U extends AuthenticableEntity, P> {
 
   async initialize() {
     try {
-      this.databaseConnection = await this.configuration.getDataSource().initialize();
-      await this.databaseConnection.runMigrations();
-      console.log("Database connection initialized.");
+      if (this.configuration.getDatabase()) {
+        this.databaseConnection = await this.configuration.getDatabase().dataSource.initialize();
+        if (this.configuration.getDatabase().shouldRunMigrations) {
+          console.log("Executing database migrations...");
+          await this.databaseConnection.runMigrations();
+          console.log("Database migrations executed.");
+        }
+        console.log("Database connection initialized.");
+      }
       this.koa.use(this.authorizationHeaderParser.bind(this));
       console.log("Authorization header parser initialized.");
       this.koa.use(bodyParser());

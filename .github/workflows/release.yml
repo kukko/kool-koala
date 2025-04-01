@@ -25,12 +25,8 @@ jobs:
       - name: Run compile script
         run: npm run compile-release
 
-      - name: Publish package
-        run: npm publish ./dist
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Run Semantic Release
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release

@@ -2,12 +2,14 @@ import Koa from 'koa';
 import { Configuration } from './configuration';
 import { RouterService } from '../services/router-service';
 import { AuthenticableEntity } from '../types/entities/authenticable-entity';
+import { DataSource } from 'typeorm';
 
 export class KoalApp<U extends AuthenticableEntity, P> {
   private static instance: KoalApp<any, any>;
 
   private koa = new Koa();
   private routerService: RouterService<U, P>;
+  private databaseConnection: DataSource;
 
   private constructor(private configuration: Configuration<U, P>) {
   }
@@ -28,6 +30,7 @@ export class KoalApp<U extends AuthenticableEntity, P> {
 
   async initialize() {
     try {
+      this.databaseConnection = await this.configuration.getDataSource().initialize();
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');

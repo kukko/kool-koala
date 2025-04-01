@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Full-stack framework to create NodeJS applications on server side and Angular applications on the client side with ease.",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": {
+    "kool-koala": "./bin/kool-koala.js"
+  },
   "scripts": {
     "gulp": "gulp",
     "dev": "gulp --gulpfile build/gulpfile.ts dev",

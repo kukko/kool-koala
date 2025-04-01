@@ -1,12 +1,7 @@
-export function printKoalaArt(): void {
-  const koalaAscii = `
-      (\\__/)
-      (o.o )  KOOL KOALA
-      (> < )
-  `;
-  console.log(koalaAscii);
-}
+import { printKoalaArt } from "./koalas";
 
 if (require.main === module) {
   printKoalaArt();
 }
+
+export * from './koalas';

@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/kukko/kool-koala/compare/v1.0.2...v1.0.3) (2025-04-01)
+
+
+### Bug Fixes
+
+* **package:** specify bin as a single file ([fae6037](https://github.com/kukko/kool-koala/commit/fae6037677224a10c8c525dcf57c2b8b1e566b8b))
+
 ## [1.0.2](https://github.com/kukko/kool-koala/compare/v1.0.1...v1.0.2) (2025-04-01)
 
 

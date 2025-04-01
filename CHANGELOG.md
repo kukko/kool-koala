@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/kukko/kool-koala/compare/v1.0.1...v1.0.2) (2025-04-01)
+
+
+### Bug Fixes
+
+* **package:** specify bin in package.json ([1d70959](https://github.com/kukko/kool-koala/commit/1d709597ec6e819a1386072e1140ed3aef1f22be))
+
 ## [1.0.1](https://github.com/kukko/kool-koala/compare/v1.0.0...v1.0.1) (2025-04-01)
 
 

@@ -1,6 +1,6 @@
 # Kool koala
 
-      (__/)
+      (\__/)
       (o.o )  KOOL KOALA
       (> < )
   

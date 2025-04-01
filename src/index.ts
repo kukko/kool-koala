@@ -1,6 +1,6 @@
 export function printKoalaArt(): void {
   const koalaAscii = `
-      (\__/)
+      (\\__/)
       (o.o )  KOOL KOALA
       (> < )
   `;

@@ -5,7 +5,7 @@ export class RouterService {
   private router: Router;
   constructor(private controllers: (ControllerConstructor)[]) {
     this.router = new Router();
-    this.controllers.forEach((controllerType) => {
+    (this.controllers ?? []).forEach((controllerType) => {
       console.log(`Register endpoints of '${controllerType.name}'`);
       const controller = new controllerType(this.router);
       controller.registerEndpoints();

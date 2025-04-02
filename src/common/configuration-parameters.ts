@@ -12,13 +12,13 @@ export interface ConfigurationParameters<
   P extends Record<string, string | number>
 > {
   port: number,
-  controllers: (ControllerConstructor)[],
+  controllers?: (ControllerConstructor)[],
   database?: DatabaseConfigurationParamters,
   jwt?: {
     saltRounds: number,
     secretKey: string
   },
-  userRepository: Repository<U>,
-  permissionType: P,
+  userRepository?: Repository<U>,
+  permissionType?: P,
   restPrefix?: string,
 }

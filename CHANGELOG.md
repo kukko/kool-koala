@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/kukko/kool-koala/compare/v1.1.2...v1.1.3) (2025-04-02)
+
+
+### Bug Fixes
+
+* **package:** add type packages to dependencies instead of dev dependencies ([966d844](https://github.com/kukko/kool-koala/commit/966d84499b1477fc87666c6bbf7804abfcb148dc))
+
 ## [1.1.2](https://github.com/kukko/kool-koala/compare/v1.1.1...v1.1.2) (2025-04-02)
 
 

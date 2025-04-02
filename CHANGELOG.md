@@ -1,3 +1,28 @@
+# [1.1.0](https://github.com/kukko/kool-koala/compare/v1.0.7...v1.1.0) (2025-04-02)
+
+
+### Bug Fixes
+
+* **app:** remove unnecessary generic parameters ([be132a6](https://github.com/kukko/kool-koala/commit/be132a6a0e9757c9b5ed6a718a222ba0fa25191a))
+* **auth:** parse jwt token correctly ([01ae5e3](https://github.com/kukko/kool-koala/commit/01ae5e3e3b5e6688b5d3f0ac14129998a115663a))
+
+
+### Features
+
+* **app:** add body parser and error handler middlewares ([c355d40](https://github.com/kukko/kool-koala/commit/c355d40320b9d2afe2659122a17b23c9b58f316f))
+* **app:** add koa as dependency and create koalapp class ([9aeffad](https://github.com/kukko/kool-koala/commit/9aeffad095ab424ed61839eab3d5101a7455bfd7))
+* **app:** create configuration class and implement singleton pattern in koalapp ([ae2bf83](https://github.com/kukko/kool-koala/commit/ae2bf83fb06832eef7da49b8367d9fe55c0d6a3e))
+* **app:** implement server start ([77a5164](https://github.com/kukko/kool-koala/commit/77a51645997634caff4654f6410d3d39d1d21b5c))
+* **app:** make database connection optional ([8b5ecb8](https://github.com/kukko/kool-koala/commit/8b5ecb86ca2458a6d498428fe10941689c88a5a6))
+* **app:** register static file server middleware ([dd49aa9](https://github.com/kukko/kool-koala/commit/dd49aa95ecbb47937bdd5ad91759db421deace99))
+* **auth:** add authorization header parser middleware ([5126eba](https://github.com/kukko/kool-koala/commit/5126eba100d9c087e688411b5cd4adec4ac41fcd))
+* **auth:** implement authentication service ([4306f99](https://github.com/kukko/kool-koala/commit/4306f9991fdb225bbb0154c38306b9b518d34a5b))
+* **config:** make application more configurable ([c3884ca](https://github.com/kukko/kool-koala/commit/c3884cae4b1fddb0b9dd843793357c5110b24cd2))
+* **database:** application connects to the database on startup ([41da573](https://github.com/kukko/kool-koala/commit/41da5731bce4f9e7648e5f1a0cf1a8d94c4f7aea))
+* **database:** run migrations after connecting to the database ([fa8fa7e](https://github.com/kukko/kool-koala/commit/fa8fa7e1a74ee93f94ea89fd5815373b982a1801))
+* **routing:** add routing middlewares to app ([0993559](https://github.com/kukko/kool-koala/commit/0993559dd799086acf23fa7a4d589bc6da6ef83d))
+* **routing:** implement router service and controller base ([d3c206c](https://github.com/kukko/kool-koala/commit/d3c206cd31956edcbfc5931ebef784117d976dec))
+
 ## [1.0.7](https://github.com/kukko/kool-koala/compare/v1.0.6...v1.0.7) (2025-04-01)
 
 

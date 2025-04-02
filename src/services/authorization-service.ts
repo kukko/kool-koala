@@ -1,15 +1,16 @@
 import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
 import { AuthorizationError } from '../types/errors/authorization-error';
 import { AuthenticableEntity } from '../types';
+import { KoalApp } from '../common';
 
 export class AuthorizationService<
   U extends AuthenticableEntity,
   P
 > {
-  constructor(private userRepository: Repository<U>) {
+  constructor() {
   }
   async userHasRight(user: U, permission: P) {
-    user = await this.userRepository.findOne({
+    user = <U>await KoalApp.getInstance().getConfiguration().getUserRepository().findOne({
       where: <FindOptionsWhere<U>>{
         id: user.id
       },

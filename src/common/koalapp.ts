@@ -10,18 +10,27 @@ import { BaseResponse, ErrorBase } from '../types';
 import serve from "koa-static";
 import path from "path";
 import fs from "fs";
+import { AuthorizationService } from '../services';
 
-export class KoalApp<U extends AuthenticableEntity, P> {
+export class KoalApp<
+  U extends AuthenticableEntity,
+  P extends Record<string, string | number>
+> {
   private static instance: KoalApp<any, any>;
 
   private koa = new Koa();
   private routerService: RouterService;
   private databaseConnection: DataSource;
 
+  private authorizationService: AuthorizationService<U, P>;
+
   private constructor(private configuration: Configuration<U, P>) {
   }
 
-  public static getInstance<T extends AuthenticableEntity, Q>(configuration?: Configuration<T, Q>): KoalApp<T, Q> {
+  public static getInstance<
+    T extends AuthenticableEntity,
+    Q extends Record<string, string | number>
+  >(configuration?: Configuration<T, Q>): KoalApp<T, Q> {
     if (!KoalApp.instance) {
       if (!configuration) {
         throw new Error("Configuration is required");
@@ -70,7 +79,7 @@ export class KoalApp<U extends AuthenticableEntity, P> {
     this.koa.use(async (ctx, next) => {
       const requestPath = ctx.request.path;
 
-      if (!requestPath.startsWith('/api') && !/\.[a-z]+$/.test(requestPath)) {
+      if (!requestPath.startsWith(this.configuration.getRestPrefix()) && !/\.[a-z]+$/.test(requestPath)) {
         ctx.type = 'html';
         ctx.body = fs.createReadStream(path.join(__dirname, '../client', 'browser', 'index.html'));
       } else {
@@ -133,5 +142,9 @@ export class KoalApp<U extends AuthenticableEntity, P> {
         };
       }
     }
+  }
+
+  getAuthorizationService() {
+    return this.authorizationService;
   }
 }

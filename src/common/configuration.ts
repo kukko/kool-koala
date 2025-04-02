@@ -8,38 +8,40 @@ interface JwtParameters {
   secretKey: string
 }
 
-export class Configuration<U extends AuthenticableEntity, P> {
-  private port = 8080;
+export class Configuration<
+  U extends AuthenticableEntity,
+  P extends Record<string, string | number>
+> {
   constructor(
-    private controllers: (ControllerConstructor)[],
-    private jwt: JwtParameters,
-    private userRepository: Repository<U>,
-    private database?: DatabaseConfigurationParamters,
+    private parameters: ConfigurationParameters<U, P>
   ) { }
-  static instantiate<T extends AuthenticableEntity, Q>(configurationParameters: ConfigurationParameters<T, Q>): Configuration<T, Q> {
+  static instantiate<
+    T extends AuthenticableEntity,
+    Q extends Record<string, string | number>
+  >(configurationParameters: ConfigurationParameters<T, Q>): Configuration<T, Q> {
     return new Configuration<T, Q>(
-      configurationParameters.controllers,
-      {
-        saltRounds: configurationParameters.jwt?.saltRounds,
-        secretKey: configurationParameters.jwt?.secretKey
-      },
-      configurationParameters.userRepository,
-      configurationParameters.database
+      configurationParameters
     );
   }
   getControllers() {
-    return this.controllers;
+    return this.parameters.controllers;
   }
   getDatabase() {
-    return this.database;
+    return this.parameters.database;
   }
   getPort(): number {
-    return this.port;
+    return this.parameters.port;
   }
   getJwtParameters(): JwtParameters {
-    return this.jwt;
+    return this.parameters.jwt;
   }
   getUserRepository() {
-    return this.userRepository;
+    return this.parameters.userRepository;
+  }
+  getPermissionType() {
+    return this.parameters.permissionType;
+  }
+  getRestPrefix() {
+    return this.parameters.restPrefix ?? '/api';
   }
 }

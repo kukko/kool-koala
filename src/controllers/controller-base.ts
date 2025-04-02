@@ -1,17 +1,14 @@
 import Router from "koa-router";
-import { AuthorizationService } from "../services/authorization-service";
-import { AuthenticableEntity } from "../types/entities/authenticable-entity";
+import { KoalApp } from "../common";
 
 export abstract class ControllerBase {
   constructor(protected router: Router) { }
   abstract registerEndpoints(): void;
   protected getApiUrl(path: string): string {
-    if (path.startsWith("/")) {
-      return `/api${path}`;
+    if (!path.startsWith("/")) {
+      path = `/${path}`;
     }
-    else {
-      return `/api/${path}`;
-    }
+    return `${KoalApp.getInstance().getConfiguration().getRestPrefix()}${path}`;
   }
 }
 

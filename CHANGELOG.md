@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/kukko/kool-koala/compare/v1.1.1...v1.1.2) (2025-04-02)
+
+
+### Bug Fixes
+
+* **config:** make more parameters optional ([e107365](https://github.com/kukko/kool-koala/commit/e107365c07236fe9d9c60ea5cad457d0caefe7e5))
+
 ## [1.1.1](https://github.com/kukko/kool-koala/compare/v1.1.0...v1.1.1) (2025-04-02)
 
 

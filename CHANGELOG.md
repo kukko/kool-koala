@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/kukko/kool-koala/compare/v1.1.0...v1.1.1) (2025-04-02)
+
+
+### Bug Fixes
+
+* **package:** generate type definitions for package during compilation ([4c76554](https://github.com/kukko/kool-koala/commit/4c76554413b8d0335c4308e6d6c95e770a0238f7))
+
 # [1.1.0](https://github.com/kukko/kool-koala/compare/v1.0.7...v1.1.0) (2025-04-02)
 
 

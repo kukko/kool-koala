@@ -3,6 +3,7 @@
   "version": "1.0.7",
   "description": "Full-stack framework to create NodeJS applications on server side and Angular applications on the client side with ease.",
   "main": "index.js",
+  "types": "index.d.ts",
   "bin": {
     "kool-koala": "./bin/kool-koala.js"
   },

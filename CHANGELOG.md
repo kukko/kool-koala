@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/kukko/kool-koala/compare/v1.1.3...v1.2.0) (2025-04-03)
+
+
+### Features
+
+* **controller:** create rest controller base ([dcab842](https://github.com/kukko/kool-koala/commit/dcab8422127018fad22b2534bb43568318948dca))
+* **types:** add all possible values to the status code enum ([ccdc3fc](https://github.com/kukko/kool-koala/commit/ccdc3fce70da8f9b77d76c9a7c9a57513152ca16))
+
 ## [1.1.3](https://github.com/kukko/kool-koala/compare/v1.1.2...v1.1.3) (2025-04-02)
 
 

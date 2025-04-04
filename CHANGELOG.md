@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/kukko/kool-koala/compare/v1.2.0...v1.2.1) (2025-04-04)
+
+
+### Bug Fixes
+
+* **controller:** change type of route type and permission type gerenric types to only accept enums ([dca54df](https://github.com/kukko/kool-koala/commit/dca54df4b6e7f7d12b2e95320e73823f449562c7))
+
 # [1.2.0](https://github.com/kukko/kool-koala/compare/v1.1.3...v1.2.0) (2025-04-03)
 
 

@@ -1,21 +1,11 @@
 import { expect } from "chai";
 
 import { AuthenticableEntity, ControllerBase, KoalApp } from "../../src/index";
-import Router from "koa-router";
 import { getKoalAppMock } from "../mocks/koal-app-mock";
 import { mockConsole, restoreConsole } from "../mocks/console-mock";
+import { getMockController } from '../mocks/mock-controller';
 
 const mockRoute = '/mock';
-
-class MockController extends ControllerBase {
-  constructor(protected router: Router) {
-    super(router);
-  }
-
-  registerEndpoints(): void {
-    this.router.get(mockRoute, () => { });
-  }
-}
 
 describe('ControllerBase', () => {
   let koalApp: KoalApp<AuthenticableEntity, {}> | undefined;
@@ -24,7 +14,7 @@ describe('ControllerBase', () => {
     koalApp = getKoalAppMock({
       port: 3000,
       controllers: [
-        MockController
+        getMockController(mockRoute)
       ]
     });
     koalApp.initialize().then(() => {

@@ -1,9 +1,9 @@
-import { Repository } from "typeorm";
 import { ControllerConstructor } from "../controllers";
 import { AuthenticableEntity } from "../types";
 import { StringEnum } from "../types/common/string-enum";
 import { JwtConfigurationParameters } from "./jwt-configuration-parameters";
 import { DatabaseConfigurationParamters } from "./database-configuration-paramters";
+import { RepositoryBase } from "../database";
 
 export interface ConfigurationParameters<
   U extends AuthenticableEntity = AuthenticableEntity,
@@ -13,7 +13,7 @@ export interface ConfigurationParameters<
   controllers?: (ControllerConstructor)[],
   database?: DatabaseConfigurationParamters,
   jwt?: JwtConfigurationParameters,
-  userRepository?: Repository<U>,
+  userRepository?: RepositoryBase<U>,
   permissionType?: P,
   restPrefix?: string,
 }

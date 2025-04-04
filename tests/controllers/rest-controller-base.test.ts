@@ -1,45 +1,15 @@
 import { expect } from "chai";
 
-import { AuthenticableEntity, ControllerBase, IdentifiableEntity, KoalApp, RepositoryBase, RestControllerBase } from "../../src/index";
-import Router from "koa-router";
+import { AuthenticableEntity, ControllerBase, KoalApp, RepositoryBase } from "../../src/index";
 import { getKoalAppMock } from "../mocks/koal-app-mock";
 import { mockConsole, restoreConsole } from "../mocks/console-mock";
+import { getMockRestController } from "../mocks/mock-rest-controller";
+import { MockEntity } from "../mocks/mock-entity";
+import { MockPermission } from "../mocks/mock-permission";
+import { getMockRepository } from "../mocks/mock-repository";
+import { MockRoute } from "../mocks/mock-route";
 
 const defaultApiPrefix = '/api';
-
-class MockEntity implements IdentifiableEntity {
-  id: number;
-}
-
-enum MockRoute {
-  API = '/mock',
-}
-
-enum MockPermission {
-  LIST = 'list',
-  VIEW = 'view',
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
-
-class MockRepository extends RepositoryBase<MockEntity> {
-  getEntityType(): new () => MockEntity {
-    return MockEntity;
-  }
-}
-
-class MockController extends RestControllerBase<MockEntity, MockRoute, MockPermission> {
-  constructor(protected router: Router) {
-    super(router);
-  }
-  getEndpoint(): MockRoute {
-    return MockRoute.API;
-  }
-  getRepository(): RepositoryBase<MockEntity> {
-    return new MockRepository();
-  }
-}
 
 describe('ControllerBase', () => {
   let koalApp: KoalApp<AuthenticableEntity, {}> | undefined;
@@ -48,7 +18,7 @@ describe('ControllerBase', () => {
     koalApp = getKoalAppMock({
       port: 3000,
       controllers: [
-        MockController
+        getMockRestController()
       ]
     });
     koalApp.initialize().then(() => {

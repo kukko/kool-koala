@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/kukko/kool-koala/compare/v1.2.1...v1.3.0) (2025-04-04)
+
+
+### Features
+
+* **deps:** add koa, koa-router and typeorm as dependencies instead of peer dependencies ([1cb9c98](https://github.com/kukko/kool-koala/commit/1cb9c98677f31840fc91b1ebf6f92544b963a01f))
+
 ## [1.2.1](https://github.com/kukko/kool-koala/compare/v1.2.0...v1.2.1) (2025-04-04)
 
 

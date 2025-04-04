@@ -12,6 +12,10 @@ export class RouterService {
     });
   }
 
+  getRouter() {
+    return this.router;
+  }
+
   getRoutes() {
     return this.router.routes();
   }

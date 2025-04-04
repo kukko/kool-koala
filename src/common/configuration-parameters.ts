@@ -1,24 +1,19 @@
-import { DataSource, Repository } from "typeorm";
 import { ControllerConstructor } from "../controllers";
 import { AuthenticableEntity } from "../types";
-
-export interface DatabaseConfigurationParamters {
-  dataSource: DataSource,
-  shouldRunMigrations: boolean
-}
+import { StringEnum } from "../types/common/string-enum";
+import { JwtConfigurationParameters } from "./jwt-configuration-parameters";
+import { DatabaseConfigurationParamters } from "./database-configuration-paramters";
+import { RepositoryBase } from "../database";
 
 export interface ConfigurationParameters<
-  U extends AuthenticableEntity,
-  P extends Record<string, string | number>
+  U extends AuthenticableEntity = AuthenticableEntity,
+  P extends StringEnum = {}
 > {
   port: number,
   controllers?: (ControllerConstructor)[],
   database?: DatabaseConfigurationParamters,
-  jwt?: {
-    saltRounds: number,
-    secretKey: string
-  },
-  userRepository?: Repository<U>,
+  jwt?: JwtConfigurationParameters,
+  userRepository?: RepositoryBase<U>,
   permissionType?: P,
   restPrefix?: string,
 }

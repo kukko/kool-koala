@@ -11,10 +11,11 @@ import serve from "koa-static";
 import path from "path";
 import fs from "fs";
 import { AuthorizationService } from '../services';
+import { StringEnum } from '../types/common/string-enum';
 
 export class KoalApp<
   U extends AuthenticableEntity,
-  P extends Record<string, string | number>
+  P extends StringEnum
 > {
   private static instance: KoalApp<any, any>;
 
@@ -29,7 +30,7 @@ export class KoalApp<
 
   public static getInstance<
     T extends AuthenticableEntity,
-    Q extends Record<string, string | number>
+    Q extends StringEnum
   >(configuration?: Configuration<T, Q>): KoalApp<T, Q> {
     if (!KoalApp.instance) {
       if (!configuration) {
@@ -40,8 +41,16 @@ export class KoalApp<
     return KoalApp.instance;
   }
 
+  public static resetInstance() {
+    KoalApp.instance = undefined;
+  }
+
   public getConfiguration(): Configuration<U, P> {
     return this.configuration;
+  }
+
+  public getRouterService(): RouterService {
+    return this.routerService;
   }
 
   public getDatabaseConnection(): DataSource {
@@ -67,6 +76,8 @@ export class KoalApp<
       console.log("Error handler initialized.");
       this.registerStaticFileServerMiddleware();
       console.log("Static file server initialized.");
+      this.registerEndpoints();
+      console.log("Endpoints registered.");
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');
@@ -88,14 +99,16 @@ export class KoalApp<
     });
   }
 
-  async start(callback?: (configuration: Configuration<U, P>) => void) {
+  registerEndpoints() {
     this.routerService = new RouterService(
       this.configuration.getControllers()
     );
     this.koa
       .use(this.routerService.getRoutes())
       .use(this.routerService.allowedMethods());
+  }
 
+  async start(callback?: (configuration: Configuration<U, P>) => void) {
     this.koa.listen(this.configuration.getPort(), () => {
       if (callback) {
         callback(this.configuration);

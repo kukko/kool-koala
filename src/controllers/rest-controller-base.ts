@@ -5,7 +5,13 @@ import { ControllerBase } from "./controller-base";
 import { KoalApp, StatusCode } from "../common";
 import { DeepPartial } from "typeorm";
 
-export abstract class RestControllerBase<T extends IdentifiableEntity, RouteType extends Record<string, string>, PermissionType extends Record<string, string>, CreateRequest extends any = Omit<T, 'id'>, EditRequest = T> extends ControllerBase {
+export abstract class RestControllerBase<
+  T extends IdentifiableEntity,
+  RouteType extends { [J in keyof RouteType]: string },
+  PermissionType extends { [K in keyof PermissionType]: string },
+  CreateRequest extends any = Omit<T, 'id'>,
+  EditRequest = T
+> extends ControllerBase {
   abstract getEndpoint(): RouteType[keyof RouteType];
   abstract getRepository(): RepositoryBase<T>;
   registerEndpoints(): void {

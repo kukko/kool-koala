@@ -1,23 +1,18 @@
-import { DataSource, Repository } from "typeorm";
-import { ControllerConstructor } from "../controllers/controller-base";
 import { AuthenticableEntity } from "../types/entities/authenticable-entity";
-import { ConfigurationParameters, DatabaseConfigurationParamters } from "./configuration-parameters";
-
-interface JwtParameters {
-  saltRounds: number,
-  secretKey: string
-}
+import { ConfigurationParameters } from "./configuration-parameters";
+import { StringEnum } from "../types/common/string-enum";
+import { JwtConfigurationParameters } from "./jwt-configuration-parameters";
 
 export class Configuration<
   U extends AuthenticableEntity,
-  P extends Record<string, string | number>
+  P extends StringEnum
 > {
   constructor(
     private parameters: ConfigurationParameters<U, P>
   ) { }
   static instantiate<
     T extends AuthenticableEntity,
-    Q extends Record<string, string | number>
+    Q extends StringEnum
   >(configurationParameters: ConfigurationParameters<T, Q>): Configuration<T, Q> {
     return new Configuration<T, Q>(
       configurationParameters
@@ -32,7 +27,7 @@ export class Configuration<
   getPort(): number {
     return this.parameters.port;
   }
-  getJwtParameters(): JwtParameters {
+  getJwtParameters(): JwtConfigurationParameters {
     return this.parameters.jwt;
   }
   getUserRepository() {

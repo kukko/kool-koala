@@ -14,6 +14,7 @@ import { AuthorizationService } from '../services';
 import { StringEnum } from '../types/common/string-enum';
 import { errorHandlerMiddleware } from '../middlewares/error-handler-middleware';
 import { transactionMiddleware } from '../middlewares/transaction-middleware';
+import { Server } from 'http';
 
 export class KoalApp<
   U extends AuthenticableEntity,
@@ -24,6 +25,8 @@ export class KoalApp<
   private koa = new Koa();
   private routerService: RouterService;
   private databaseConnection: DataSource;
+
+  private server: Server;
 
   private authorizationService: AuthorizationService<U, P>;
 
@@ -43,7 +46,8 @@ export class KoalApp<
     return KoalApp.instance;
   }
 
-  public static resetInstance() {
+  public static async resetInstance() {
+    await KoalApp.getInstance().getDatabaseConnection().destroy();
     KoalApp.instance = undefined;
   }
 
@@ -117,11 +121,18 @@ export class KoalApp<
   }
 
   async start(callback?: (configuration: Configuration<U, P>) => void) {
-    this.koa.listen(this.configuration.getPort(), () => {
+    this.server = this.koa.listen(this.configuration.getPort(), () => {
       if (callback) {
         callback(this.configuration);
       }
     });
+  }
+
+  stop() {
+    if (this.server) {
+      this.server.close();
+      this.server = undefined;
+    }
   }
 
   async authorizationHeaderParser(context: ParameterizedContext, next: Next) {

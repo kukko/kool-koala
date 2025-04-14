@@ -2,14 +2,15 @@ import { expect } from "chai";
 import { KoalApp, RepositoryBase } from "../../../src";
 import { MockRepository } from '../../mocks/mock-repository';
 import { MockEntity } from "../../mocks/mock-entity";
-import { MockConfiguration } from "../../mocks/mock-configuration";
+import { MockConfigurationParameters } from "../../mocks/mock-configuration-parameters";
 import { mockConsole, restoreConsole } from "../../mocks/console-mock";
+import { getKoalAppMock } from "../../mocks/koal-app-mock";
 
 describe('RepositoryBase', () => {
   let mockRepository: RepositoryBase<MockEntity>;
   before((done) => {
     mockConsole();
-    KoalApp.getInstance(MockConfiguration).initialize().then(() => {
+    getKoalAppMock(MockConfigurationParameters).initialize().then(() => {
       mockRepository = new MockRepository();
       done();
     });
@@ -140,8 +141,8 @@ describe('RepositoryBase', () => {
       }).catch(done);
     });
   });
-  after(() => {
-    KoalApp.resetInstance();
+  after(async () => {
+    await KoalApp.resetInstance();
     restoreConsole();
   });
 });

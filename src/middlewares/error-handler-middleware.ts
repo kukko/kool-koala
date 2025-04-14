@@ -6,6 +6,7 @@ export const errorHandlerMiddleware = async (context: Context, next: () => Promi
   try {
     await next();
   } catch (error) {
+    console.log(error);
     if (error instanceof ErrorBase) {
       context.status = error.getStatusCode();
       context.body = <BaseResponse>{

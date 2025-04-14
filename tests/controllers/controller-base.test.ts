@@ -4,6 +4,7 @@ import { AuthenticableEntity, ControllerBase, KoalApp } from "../../src/index";
 import { getKoalAppMock } from "../mocks/koal-app-mock";
 import { mockConsole, restoreConsole } from "../mocks/console-mock";
 import { getMockController } from '../mocks/mock-controller';
+import { MockConfigurationParameters } from "../mocks/mock-configuration-parameters";
 
 const mockRoute = '/mock';
 
@@ -12,12 +13,19 @@ describe('ControllerBase', () => {
   before((done) => {
     mockConsole();
     koalApp = getKoalAppMock({
-      port: 3000,
+      ...MockConfigurationParameters,
+      controllers: [
+        getMockController(mockRoute)
+      ]
+    });
+    console.log({
+      ...MockConfigurationParameters,
       controllers: [
         getMockController(mockRoute)
       ]
     });
     koalApp.initialize().then(() => {
+      console.log('ASD');
       done();
     })
   });
@@ -29,8 +37,8 @@ describe('ControllerBase', () => {
       return route.path === mockRoute && route.methods.includes('GET');
     })).to.have.length(1);
   });
-  after(() => {
-    KoalApp.resetInstance();
+  after(async () => {
+    await KoalApp.resetInstance();
     restoreConsole();
   });
 });

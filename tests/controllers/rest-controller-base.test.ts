@@ -3,11 +3,8 @@ import { expect } from "chai";
 import { AuthenticableEntity, ControllerBase, KoalApp, RepositoryBase } from "../../src/index";
 import { getKoalAppMock } from "../mocks/koal-app-mock";
 import { mockConsole, restoreConsole } from "../mocks/console-mock";
-import { getMockRestController } from "../mocks/mock-rest-controller";
-import { MockEntity } from "../mocks/mock-entity";
-import { MockPermission } from "../mocks/mock-permission";
-import { getMockRepository } from "../mocks/mock-repository";
 import { MockRoute } from "../mocks/mock-route";
+import { MockRestController } from '../mocks/mock-rest-controller'
 
 const defaultApiPrefix = '/api';
 
@@ -18,7 +15,7 @@ describe('ControllerBase', () => {
     koalApp = getKoalAppMock({
       port: 3000,
       controllers: [
-        getMockRestController()
+        MockRestController
       ]
     });
     koalApp.initialize().then(() => {

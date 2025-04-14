@@ -12,7 +12,7 @@
     "dev": "gulp --gulpfile build/gulpfile.ts dev",
     "compile": "gulp --gulpfile build/gulpfile.ts compile",
     "compile-release": "gulp --gulpfile build/gulpfile.ts compile-release",
-    "test": "mocha --config tests/.mocharc.json",
+    "test": "TS_NODE_PROJECT=tsconfig.test.json mocha --config tests/.mocharc.json",
     "prepare": "husky",
     "postversion": "cp -r package.json .."
   },
@@ -74,6 +74,7 @@
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
     "koa-static": "^5.0.0",
+    "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.22"
   }
 }

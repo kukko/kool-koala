@@ -12,6 +12,8 @@ import path from "path";
 import fs from "fs";
 import { AuthorizationService } from '../services';
 import { StringEnum } from '../types/common/string-enum';
+import { errorHandlerMiddleware } from '../middlewares/error-handler-middleware';
+import { transactionMiddleware } from '../middlewares/transaction-middleware';
 
 export class KoalApp<
   U extends AuthenticableEntity,
@@ -56,24 +58,18 @@ export class KoalApp<
   public getDatabaseConnection(): DataSource {
     return this.databaseConnection;
   }
-
   async initialize() {
     try {
-      if (this.configuration.getDatabase()) {
-        this.databaseConnection = await this.configuration.getDatabase().dataSource.initialize();
-        if (this.configuration.getDatabase().shouldRunMigrations) {
-          console.log("Executing database migrations...");
-          await this.databaseConnection.runMigrations();
-          console.log("Database migrations executed.");
-        }
-        console.log("Database connection initialized.");
-      }
+      await this.setupDatabaseConnection();
+      console.log("Database connection initialized.");
+      this.setupErrorHandler();
+      console.log("Error handler initialized.");
+      this.setupTransaction();
+      console.log("Transaction starter middleware initialized.");
       this.koa.use(this.authorizationHeaderParser.bind(this));
       console.log("Authorization header parser initialized.");
       this.koa.use(bodyParser());
       console.log("Body parser initialized.");
-      this.koa.use(this.errorHandler.bind(this));
-      console.log("Error handler initialized.");
       this.registerStaticFileServerMiddleware();
       console.log("Static file server initialized.");
       this.registerEndpoints();
@@ -82,6 +78,18 @@ export class KoalApp<
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');
     }
+  }
+  async setupDatabaseConnection() {
+    if (this.configuration.getDatabase()) {
+      this.databaseConnection = await this.configuration.getDatabase().dataSource.initialize();
+      await this.databaseConnection.runMigrations();
+    }
+  }
+  setupErrorHandler() {
+    this.koa.use(errorHandlerMiddleware);
+  }
+  setupTransaction() {
+    this.koa.use(transactionMiddleware);
   }
 
   registerStaticFileServerMiddleware() {

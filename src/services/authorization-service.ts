@@ -10,7 +10,7 @@ export class AuthorizationService<
   constructor() {
   }
   async userHasRight(user: U, permission: P) {
-    user = <U>await KoalApp.getInstance().getConfiguration().getUserRepository().findOne({
+    user = <U>await KoalApp.getInstance().getConfiguration().getUserRepository().getOneWhere({
       where: <FindOptionsWhere<U>>{
         id: user.id
       },

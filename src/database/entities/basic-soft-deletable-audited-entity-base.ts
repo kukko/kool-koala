@@ -1,8 +1,8 @@
-import { Column } from "typeorm";
-import { BasicAuditedEntityBase } from "./basic-audited-entity-base";
+import { DeleteDateColumn } from "typeorm";
 import { SoftDeletable } from "./interfaces/soft-deletable";
+import { AuditedEntityBase } from "./audited-entity-base";
 
-export abstract class BasicSoftDeletableAuditedEntityBase extends BasicAuditedEntityBase implements SoftDeletable {
-  @Column({ type: 'timestamp', nullable: true })
+export abstract class SoftDeletableAuditedEntityBase extends AuditedEntityBase implements SoftDeletable {
+  @DeleteDateColumn()
   deletedAt: Date;
 }

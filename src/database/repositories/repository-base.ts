@@ -36,12 +36,6 @@ export abstract class RepositoryBase<T extends IdentifiableEntity> {
   save(entity: T | DeepPartial<T>) {
     return this.getRepository().save(entity);
   }
-  find(where: FindManyOptions<T>) {
-    return this.getRepository().find(where);
-  }
-  findOne(where: FindOneOptions<T>) {
-    return this.getRepository().findOne(where);
-  }
   delete(entity: T) {
     return this.getRepository().delete(entity.id);
   }

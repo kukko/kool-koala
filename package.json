@@ -12,7 +12,7 @@
     "dev": "gulp --gulpfile build/gulpfile.ts dev",
     "compile": "gulp --gulpfile build/gulpfile.ts compile",
     "compile-release": "gulp --gulpfile build/gulpfile.ts compile-release",
-    "test": "mocha --config tests/.mocharc.json",
+    "test": "TS_NODE_PROJECT=tsconfig.test.json mocha --config tests/.mocharc.json",
     "prepare": "husky",
     "postversion": "cp -r package.json .."
   },
@@ -43,6 +43,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mocha": "^10.0.10",
     "@types/yargs": "^17.0.33",
+    "axios": "^1.8.4",
     "chai": "^5.2.0",
     "commitizen": "^4.3.1",
     "cz-git": "^1.11.1",
@@ -74,6 +75,7 @@
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
     "koa-static": "^5.0.0",
+    "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.22"
   }
 }

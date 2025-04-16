@@ -1,11 +1,16 @@
-import { DataSource, DeepPartial, FindManyOptions, FindOneOptions, FindOptionsRelations, Repository } from "typeorm";
+import { DeepPartial, FindManyOptions, FindOneOptions, FindOptionsRelations, FindOptionsWhere, QueryRunner, Repository } from "typeorm";
 import { IdentifiableEntity } from "../../types";
 import { KoalApp } from "../../common";
 
 export abstract class RepositoryBase<T extends IdentifiableEntity> {
   private _repository: Repository<T>;
-  constructor(databaseConnection?: DataSource) {
-    this._repository = (databaseConnection ?? KoalApp.getInstance().getDatabaseConnection()).getRepository(this.getEntityType());
+  constructor(queryRunner?: QueryRunner) {
+    if (queryRunner === undefined) {
+      this._repository = KoalApp.getInstance().getDatabaseConnection().getRepository(this.getEntityType());
+    }
+    else {
+      this._repository = queryRunner.manager.getRepository(this.getEntityType());
+    }
   }
   getRepository() {
     return this._repository;
@@ -31,13 +36,13 @@ export abstract class RepositoryBase<T extends IdentifiableEntity> {
   save(entity: T | DeepPartial<T>) {
     return this.getRepository().save(entity);
   }
-  find(where: FindManyOptions<T>) {
-    return this.getRepository().find(where);
-  }
-  findOne(where: FindOneOptions<T>) {
-    return this.getRepository().findOne(where);
-  }
   delete(entity: T) {
     return this.getRepository().delete(entity.id);
+  }
+  deleteWhere(where?: FindOptionsWhere<T>) {
+    return this.getRepository().delete(where);
+  }
+  deleteAll() {
+    return this.deleteWhere({});
   }
 }

@@ -1,5 +1,8 @@
-import { IdentifiableEntity } from "../../src";
+import { Column, Entity } from "typeorm";
+import { AuditedEntityBase, EntityBase, IdentifiableEntity } from "../../src";
 
-export class MockEntity implements IdentifiableEntity {
-  id: number;
+@Entity()
+export class MockEntity extends EntityBase implements IdentifiableEntity {
+  @Column()
+  name: string;
 }

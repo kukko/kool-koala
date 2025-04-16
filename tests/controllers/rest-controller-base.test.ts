@@ -1,28 +1,28 @@
 import { expect } from "chai";
-
 import { AuthenticableEntity, ControllerBase, KoalApp, RepositoryBase } from "../../src/index";
 import { getKoalAppMock } from "../mocks/koal-app-mock";
-import { mockConsole, restoreConsole } from "../mocks/console-mock";
-import { getMockRestController } from "../mocks/mock-rest-controller";
-import { MockEntity } from "../mocks/mock-entity";
-import { MockPermission } from "../mocks/mock-permission";
-import { getMockRepository } from "../mocks/mock-repository";
 import { MockRoute } from "../mocks/mock-route";
+import { MockRestController } from '../mocks/mock-rest-controller'
+import axios from 'axios';
+import { MockConfigurationParameters } from "../mocks/mock-configuration-parameters";
+import { mockConsole, restoreConsole } from "../mocks/console-mock";
 
 const defaultApiPrefix = '/api';
 
-describe('ControllerBase', () => {
+describe('RestControllerBase', () => {
   let koalApp: KoalApp<AuthenticableEntity, {}> | undefined;
   before((done) => {
     mockConsole();
     koalApp = getKoalAppMock({
-      port: 3000,
+      ...MockConfigurationParameters,
       controllers: [
-        getMockRestController()
+        MockRestController
       ]
     });
     koalApp.initialize().then(() => {
-      done();
+      koalApp.start().then(() => {
+        done();
+      });
     })
   });
   it('should be defined', () => {
@@ -53,8 +53,67 @@ describe('ControllerBase', () => {
       return route.path === `${defaultApiPrefix}${MockRoute.API}/:id` && route.methods.includes('DELETE');
     })).to.have.length(1);
   });
-  after(() => {
-    KoalApp.resetInstance();
+  describe('Endpoints work correctly', () => {
+    it('Create endpoint', (done) => {
+      axios.post('http://localhost:8082/api/mock', {
+        name: 'test'
+      }, {
+        validateStatus: () => true
+      }).then((response) => {
+        expect(response.status).to.equal(201);
+        expect(response.data).to.be.an('object');
+        expect(response.data.entity.name).to.equal('test');
+        expect(response.data.entity.id).to.be.a('number');
+        expect(response.data.entity.id).to.be.equal(1);
+        done();
+      }).catch(done);
+    });
+    it('List endpoint', (done) => {
+      axios.get('http://localhost:8082/api/mock', {
+        validateStatus: () => true
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        expect(response.data).to.be.an('array');
+        expect(response.data.length).to.equal(1);
+        done();
+      }).catch(done);
+    });
+    it('View endpoint', (done) => {
+      axios.get('http://localhost:8082/api/mock/1', {
+        validateStatus: () => true
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        expect(response.data).to.be.an('object');
+        expect(response.data.name).to.equal('test');
+        expect(response.data.id).to.be.a('number');
+        expect(response.data.id).to.be.equal(1);
+        done();
+      }).catch(done);
+    });
+    it('Delete endpoint', (done) => {
+      axios.delete('http://localhost:8082/api/mock/1', {
+        validateStatus: () => true
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        axios.get('http://localhost:8082/api/mock/1', {
+          validateStatus: () => true
+        }).then((response) => {
+          expect(response.status).to.equal(404);
+          axios.get('http://localhost:8082/api/mock', {
+            validateStatus: () => true
+          }).then((response) => {
+            expect(response.status).to.equal(200);
+            expect(response.data).to.be.an('array');
+            expect(response.data.length).to.equal(0);
+            done();
+          });
+        }).catch(done);
+      }).catch(done);
+    });
+  });
+  after(async () => {
+    KoalApp.getInstance().stop();
+    await KoalApp.resetInstance();
     restoreConsole();
   });
 });

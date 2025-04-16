@@ -1,29 +1,30 @@
 import { expect } from 'chai';
-import { AuthenticableEntity, Configuration, ConfigurationParameters } from '../../src/index';
+import { AuthenticableEntity, Configuration, ConfigurationParameters, IdentifiableEntity, PermissionEntity } from '../../src/index';
 import { getMockController } from '../mocks/mock-controller';
-import { mockDataSource } from '../mocks/mock-data-source';
-import { getMockRepository } from '../mocks/mock-repository';
+import { MockDataSource } from '../mocks/mock-data-source';
 import { MockPermission } from '../mocks/mock-permission';
 
-const configurationParameters: ConfigurationParameters = {
-  port: 3000,
-  controllers: [
-    getMockController()
-  ],
-  database: {
-    dataSource: mockDataSource,
-    shouldRunMigrations: false
-  },
-  jwt: {
-    saltRounds: 10,
-    secretKey: 'secret'
-  },
-  userRepository: getMockRepository(),
-  permissionType: MockPermission,
-  restPrefix: '/api'
-};
+let configurationParameters: ConfigurationParameters;
 
 describe('Configuration', () => {
+  before(() => {
+    configurationParameters = {
+      port: 3000,
+      controllers: [
+        getMockController()
+      ],
+      database: {
+        dataSource: MockDataSource,
+        shouldRunMigrations: false
+      },
+      jwt: {
+        saltRounds: 10,
+        secretKey: 'secret'
+      },
+      permissionType: MockPermission,
+      restPrefix: '/api'
+    };
+  });
   it('should be defined', () => {
     expect(Configuration).to.be.a('function');
   });

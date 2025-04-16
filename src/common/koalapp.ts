@@ -12,6 +12,9 @@ import path from "path";
 import fs from "fs";
 import { AuthorizationService } from '../services';
 import { StringEnum } from '../types/common/string-enum';
+import { errorHandlerMiddleware } from '../middlewares/error-handler-middleware';
+import { transactionMiddleware } from '../middlewares/transaction-middleware';
+import { Server } from 'http';
 
 export class KoalApp<
   U extends AuthenticableEntity,
@@ -22,6 +25,8 @@ export class KoalApp<
   private koa = new Koa();
   private routerService: RouterService;
   private databaseConnection: DataSource;
+
+  private server: Server;
 
   private authorizationService: AuthorizationService<U, P>;
 
@@ -41,7 +46,8 @@ export class KoalApp<
     return KoalApp.instance;
   }
 
-  public static resetInstance() {
+  public static async resetInstance() {
+    await KoalApp.getInstance().getDatabaseConnection().destroy();
     KoalApp.instance = undefined;
   }
 
@@ -56,24 +62,18 @@ export class KoalApp<
   public getDatabaseConnection(): DataSource {
     return this.databaseConnection;
   }
-
   async initialize() {
     try {
-      if (this.configuration.getDatabase()) {
-        this.databaseConnection = await this.configuration.getDatabase().dataSource.initialize();
-        if (this.configuration.getDatabase().shouldRunMigrations) {
-          console.log("Executing database migrations...");
-          await this.databaseConnection.runMigrations();
-          console.log("Database migrations executed.");
-        }
-        console.log("Database connection initialized.");
-      }
+      await this.setupDatabaseConnection();
+      console.log("Database connection initialized.");
+      this.setupErrorHandler();
+      console.log("Error handler initialized.");
+      this.setupTransaction();
+      console.log("Transaction starter middleware initialized.");
       this.koa.use(this.authorizationHeaderParser.bind(this));
       console.log("Authorization header parser initialized.");
       this.koa.use(bodyParser());
       console.log("Body parser initialized.");
-      this.koa.use(this.errorHandler.bind(this));
-      console.log("Error handler initialized.");
       this.registerStaticFileServerMiddleware();
       console.log("Static file server initialized.");
       this.registerEndpoints();
@@ -82,6 +82,18 @@ export class KoalApp<
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');
     }
+  }
+  async setupDatabaseConnection() {
+    if (this.configuration.getDatabase()) {
+      this.databaseConnection = await this.configuration.getDatabase().dataSource.initialize();
+      await this.databaseConnection.runMigrations();
+    }
+  }
+  setupErrorHandler() {
+    this.koa.use(errorHandlerMiddleware);
+  }
+  setupTransaction() {
+    this.koa.use(transactionMiddleware);
   }
 
   registerStaticFileServerMiddleware() {
@@ -109,11 +121,18 @@ export class KoalApp<
   }
 
   async start(callback?: (configuration: Configuration<U, P>) => void) {
-    this.koa.listen(this.configuration.getPort(), () => {
+    this.server = this.koa.listen(this.configuration.getPort(), () => {
       if (callback) {
         callback(this.configuration);
       }
     });
+  }
+
+  stop() {
+    if (this.server) {
+      this.server.close();
+      this.server = undefined;
+    }
   }
 
   async authorizationHeaderParser(context: ParameterizedContext, next: Next) {

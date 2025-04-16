@@ -1,9 +1,9 @@
-import { ParameterizedContext } from "koa";
 import { RepositoryBase } from "../database/repositories";
 import { BaseResponse, ErrorBase, IdentifiableEntity } from "../types";
 import { ControllerBase } from "./controller-base";
 import { KoalApp, StatusCode } from "../common";
 import { DeepPartial } from "typeorm";
+import { Context } from "../types/common/context";
 
 export abstract class RestControllerBase<
   T extends IdentifiableEntity,
@@ -34,13 +34,13 @@ export abstract class RestControllerBase<
   protected getAuthorizationService() {
     return KoalApp.getInstance().getAuthorizationService();
   }
-  async listEntities(context: ParameterizedContext): Promise<void> {
+  async listEntities(context: Context): Promise<void> {
     if (this.getListPermission() !== undefined) {
       await this.getAuthorizationService().userHasRight(context.state.user, this.getListPermission());
     }
     context.body = await this.getEntities(context);
   }
-  async viewEntity(context: ParameterizedContext): Promise<void> {
+  async viewEntity(context: Context): Promise<void> {
     if (this.getViewPermission() !== undefined) {
       await this.getAuthorizationService().userHasRight(context.state.user, this.getViewPermission());
     }
@@ -52,7 +52,7 @@ export abstract class RestControllerBase<
       context.status = StatusCode.NOT_FOUND;
     }
   }
-  async createEntity(context: ParameterizedContext): Promise<T> {
+  async createEntity(context: Context): Promise<T> {
     if (this.getCreatePermission() !== undefined) {
       await this.getAuthorizationService().userHasRight(context.state.user, this.getCreatePermission());
     }
@@ -68,7 +68,7 @@ export abstract class RestControllerBase<
     };
     return entity;
   }
-  async editEntity(context: ParameterizedContext): Promise<void> {
+  async editEntity(context: Context): Promise<void> {
     if (this.getEditPermission() !== undefined) {
       await this.getAuthorizationService().userHasRight(context.state.user, this.getEditPermission());
     }
@@ -88,7 +88,7 @@ export abstract class RestControllerBase<
       context.status = StatusCode.NOT_FOUND;
     }
   }
-  async deleteEntity(context: ParameterizedContext) {
+  async deleteEntity(context: Context) {
     if (this.getDeletePermission() !== undefined) {
       await this.getAuthorizationService().userHasRight(context.state.user, this.getDeletePermission());
     }
@@ -111,10 +111,10 @@ export abstract class RestControllerBase<
   protected async delete(entity: T) {
     await this.getRepository().delete(entity);
   }
-  getEntities(context: ParameterizedContext): Promise<T[]> {
+  getEntities(context: Context): Promise<T[]> {
     return this.getRepository().getAll();
   }
-  getById(context: ParameterizedContext): Promise<T> {
+  getById(context: Context): Promise<T> {
     return this.getRepository().getById(context.params.id);
   }
 

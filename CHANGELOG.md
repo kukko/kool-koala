@@ -1,3 +1,17 @@
+# [1.4.0](https://github.com/kukko/kool-koala/compare/v1.3.0...v1.4.0) (2025-04-16)
+
+
+### Bug Fixes
+
+* **database:** change the type of the generic type in the soft deletable repository ([a132e23](https://github.com/kukko/kool-koala/commit/a132e2368054dea29cffd319ddbd965ab20efeae))
+
+
+### Features
+
+* **database:** create delete all and delete where methods in repository base ([c163441](https://github.com/kukko/kool-koala/commit/c16344160b5f5c342541b22e39bfc1c89c518e4b))
+* **database:** create soft deletable entity and repository ([93eb49b](https://github.com/kukko/kool-koala/commit/93eb49bb9d17b19795e8b436ead318385106de5f))
+* **server:** make possible to stop server ([b2dc42b](https://github.com/kukko/kool-koala/commit/b2dc42be07b810640070eefcf81c5dcd4774469d))
+
 # [1.3.0](https://github.com/kukko/kool-koala/compare/v1.2.1...v1.3.0) (2025-04-04)
 
 

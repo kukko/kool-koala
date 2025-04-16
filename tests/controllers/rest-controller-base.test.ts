@@ -5,13 +5,14 @@ import { MockRoute } from "../mocks/mock-route";
 import { MockRestController } from '../mocks/mock-rest-controller'
 import axios from 'axios';
 import { MockConfigurationParameters } from "../mocks/mock-configuration-parameters";
+import { mockConsole, restoreConsole } from "../mocks/console-mock";
 
 const defaultApiPrefix = '/api';
 
-describe('ControllerBase', () => {
+describe('RestControllerBase', () => {
   let koalApp: KoalApp<AuthenticableEntity, {}> | undefined;
   before((done) => {
-    //mockConsole();
+    mockConsole();
     koalApp = getKoalAppMock({
       ...MockConfigurationParameters,
       controllers: [
@@ -113,6 +114,6 @@ describe('ControllerBase', () => {
   after(async () => {
     KoalApp.getInstance().stop();
     await KoalApp.resetInstance();
-    //restoreConsole();
+    restoreConsole();
   });
 });

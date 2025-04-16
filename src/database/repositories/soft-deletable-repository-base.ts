@@ -1,8 +1,9 @@
 import { DeleteResult, FindManyOptions, FindOneOptions, FindOptionsRelations, FindOptionsWhere } from "typeorm";
 import { RepositoryBase } from "./repository-base";
-import { SoftDeletableEntityBase } from "../entities";
+import { SoftDeletable } from "../entities";
+import { IdentifiableEntity } from "../../types";
 
-export abstract class SoftDeletableRepositoryBase<T extends SoftDeletableEntityBase> extends RepositoryBase<T> {
+export abstract class SoftDeletableRepositoryBase<T extends IdentifiableEntity & SoftDeletable> extends RepositoryBase<T> {
   override getAll(withDeleted: boolean = false) {
     return this.getRepository().find({
       withDeleted

@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/kukko/kool-koala/compare/v1.4.0...v1.5.0) (2025-04-17)
+
+
+### Features
+
+* **server:** create context type and use it in rest controller base ([4610170](https://github.com/kukko/kool-koala/commit/46101700a90ece98d74cf7f84adc3bbb1c85b627))
+
 # [1.4.0](https://github.com/kukko/kool-koala/compare/v1.3.0...v1.4.0) (2025-04-16)
 
 

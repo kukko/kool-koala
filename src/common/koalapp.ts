@@ -1,4 +1,4 @@
-import Koa, { Next, ParameterizedContext } from 'koa';
+import Koa, { Next } from 'koa';
 import { Configuration } from './configuration';
 import { RouterService } from '../services/router-service';
 import { AuthenticableEntity } from '../types/entities/authenticable-entity';
@@ -15,6 +15,7 @@ import { StringEnum } from '../types/common/string-enum';
 import { errorHandlerMiddleware } from '../middlewares/error-handler-middleware';
 import { transactionMiddleware } from '../middlewares/transaction-middleware';
 import { Server } from 'http';
+import { Context } from '../types/common/context';
 
 export class KoalApp<
   U extends AuthenticableEntity,
@@ -135,12 +136,12 @@ export class KoalApp<
     }
   }
 
-  async authorizationHeaderParser(context: ParameterizedContext, next: Next) {
+  async authorizationHeaderParser(context: Context, next: Next) {
     const authHeader = context.headers.authorization;
     if (authHeader) {
       const token = authHeader.split(' ')[1];
       try {
-        context.state.user = jwt.verify(token, this.configuration.getJwtParameters().secretKey);
+        context.state.user = <AuthenticableEntity>jwt.verify(token, this.configuration.getJwtParameters().secretKey);
         await next();
       } catch (error) {
         context.status = StatusCode.UNAUTHORIZED;
@@ -155,7 +156,7 @@ export class KoalApp<
     }
   }
 
-  async errorHandler(context: ParameterizedContext, next: Next) {
+  async errorHandler(context: Context, next: Next) {
     try {
       await next();
     } catch (error) {

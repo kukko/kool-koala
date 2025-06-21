@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/kukko/kool-koala/compare/v1.5.0...v1.5.1) (2025-06-21)
+
+
+### Bug Fixes
+
+* **database:** does not trying to create query runner if no database configuration is provided ([6d0d764](https://github.com/kukko/kool-koala/commit/6d0d764983247e7ceb93c00d6e15aee264f1fe9d))
+
 # [1.5.0](https://github.com/kukko/kool-koala/compare/v1.4.0...v1.5.0) (2025-04-17)
 
 

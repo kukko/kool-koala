@@ -3,6 +3,10 @@ import { State } from "../types/common/state";
 import { KoalApp } from "../common";
 
 export const transactionMiddleware: Middleware<State> = async (context, next) => {
+  if (!KoalApp.getInstance().getConfiguration().getDatabase()) {
+    await next();
+    return;
+  }
   const queryRunner = KoalApp.getInstance().getDatabaseConnection().createQueryRunner();
   context.state.queryRunner = queryRunner;
   queryRunner.startTransaction();

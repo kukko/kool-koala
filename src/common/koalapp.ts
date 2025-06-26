@@ -98,18 +98,22 @@ export class KoalApp<
   }
 
   registerStaticFileServerMiddleware() {
-    this.koa.use(serve(path.join(__dirname, '../client', 'browser')));
-    this.koa.use(serve(path.join(__dirname, '../../static')));
-    this.koa.use(async (ctx, next) => {
-      const requestPath = ctx.request.path;
+    if (!this.configuration.getStaticFilesConfiguration()) {
+      return;
+    }
+    for (const staticFilesConfig of this.configuration.getStaticFilesConfiguration()) {
+      this.koa.use(serve(path.join(__dirname, staticFilesConfig.folder)));
+      this.koa.use(async (ctx, next) => {
+        const requestPath = ctx.request.path;
 
-      if (!requestPath.startsWith(this.configuration.getRestPrefix()) && !/\.[a-z]+$/.test(requestPath)) {
-        ctx.type = 'html';
-        ctx.body = fs.createReadStream(path.join(__dirname, '../client', 'browser', 'index.html'));
-      } else {
-        await next();
-      }
-    });
+        if (!requestPath.startsWith(this.configuration.getRestPrefix()) && !/\.[a-z]+$/.test(requestPath)) {
+          ctx.type = staticFilesConfig.defaultFileMimeType ?? 'html';
+          ctx.body = fs.createReadStream(path.join(__dirname, staticFilesConfig.folder, staticFilesConfig.defaultFile ?? 'index.html'));
+        } else {
+          await next();
+        }
+      });
+    }
   }
 
   registerEndpoints() {

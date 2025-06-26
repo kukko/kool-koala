@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/kukko/kool-koala/compare/v1.5.1...v1.6.0) (2025-06-26)
+
+
+### Features
+
+* **config:** make possible to configure static file serving ([05911c0](https://github.com/kukko/kool-koala/commit/05911c047f9e91de0f6fdd2151742272650a663f))
+
 ## [1.5.1](https://github.com/kukko/kool-koala/compare/v1.5.0...v1.5.1) (2025-06-21)
 
 

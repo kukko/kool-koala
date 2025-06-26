@@ -39,4 +39,7 @@ export class Configuration<
   getRestPrefix() {
     return this.parameters.restPrefix ?? '/api';
   }
+  getStaticFilesConfiguration() {
+    return this.parameters.staticFiles;
+  }
 }

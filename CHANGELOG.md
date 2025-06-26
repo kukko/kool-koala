@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/kukko/kool-koala/compare/v1.6.0...v1.6.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* **server:** change the way static files are served ([eb349bf](https://github.com/kukko/kool-koala/commit/eb349bfcdee5420dba28cfe5a70b9b48c1e3ff86))
+
 # [1.6.0](https://github.com/kukko/kool-koala/compare/v1.5.1...v1.6.0) (2025-06-26)
 
 

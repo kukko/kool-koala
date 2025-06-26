@@ -102,13 +102,16 @@ export class KoalApp<
       return;
     }
     for (const staticFilesConfig of this.configuration.getStaticFilesConfiguration()) {
-      this.koa.use(serve(path.join(__dirname, staticFilesConfig.folder)));
+      const staticFilesPath = path.isAbsolute(staticFilesConfig.folder) ? staticFilesConfig.folder : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
+      console.log(`Serving files from: ${staticFilesPath}`);
+      this.koa.use(serve(staticFilesPath));
       this.koa.use(async (ctx, next) => {
+        console.log(`Request received for static file: ${ctx.request.path}`);
         const requestPath = ctx.request.path;
 
         if (!requestPath.startsWith(this.configuration.getRestPrefix()) && !/\.[a-z]+$/.test(requestPath)) {
           ctx.type = staticFilesConfig.defaultFileMimeType ?? 'html';
-          ctx.body = fs.createReadStream(path.join(__dirname, staticFilesConfig.folder, staticFilesConfig.defaultFile ?? 'index.html'));
+          ctx.body = fs.createReadStream(path.join(staticFilesPath, staticFilesConfig.defaultFile ?? 'index.html'));
         } else {
           await next();
         }
@@ -134,10 +137,22 @@ export class KoalApp<
   }
 
   stop() {
-    if (this.server) {
-      this.server.close();
-      this.server = undefined;
-    }
+    return new Promise<void>((resolve, reject) => {
+      if (this.server) {
+        this.server.close((error) => {
+          if (!error) {
+            resolve();
+          }
+          else {
+            reject();
+          }
+        });
+        this.server = undefined;
+      }
+      else {
+        reject();
+      }
+    });
   }
 
   async authorizationHeaderParser(context: Context, next: Next) {

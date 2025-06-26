@@ -25,7 +25,6 @@ describe('ControllerBase', () => {
       ]
     });
     koalApp.initialize().then(() => {
-      console.log('ASD');
       done();
     })
   });

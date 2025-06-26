@@ -33,8 +33,10 @@ const configuration = new Configuration({
   port: 8080,
 });
 
-KoalApp.getInstance(configuration).start((configuration) => {
-  console.log(`KoalApp is started.`);
+KoalApp.getInstance(configuration).initialize().then(() => {
+  KoalApp.getInstance().start((configuration) => {
+    console.log(`KoalApp is started.`);
+  });
 });
 ```
 

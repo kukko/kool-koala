@@ -75,10 +75,10 @@ export class KoalApp<
       console.log("Authorization header parser initialized.");
       this.koa.use(bodyParser());
       console.log("Body parser initialized.");
-      this.registerStaticFileServerMiddleware();
-      console.log("Static file server initialized.");
       this.registerEndpoints();
       console.log("Endpoints registered.");
+      this.registerStaticFileServerMiddleware();
+      console.log("Static file server initialized.");
     } catch (error) {
       console.log("Error during database initialization...", error);
       throw new Error('Error during application intialization...');

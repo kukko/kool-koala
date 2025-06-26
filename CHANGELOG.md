@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/kukko/kool-koala/compare/v1.6.1...v1.6.2) (2025-06-26)
+
+
+### Bug Fixes
+
+* **server:** change order of endpoint registration ([438ed2c](https://github.com/kukko/kool-koala/commit/438ed2c1bb22ca8ca6d989f7fa0551f5d1e93c2f))
+
 ## [1.6.1](https://github.com/kukko/kool-koala/compare/v1.6.0...v1.6.1) (2025-06-26)
 
 

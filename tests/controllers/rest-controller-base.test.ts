@@ -23,7 +23,7 @@ describe('RestControllerBase', () => {
       koalApp.start().then(() => {
         done();
       });
-    })
+    });
   });
   it('should be defined', () => {
     expect(ControllerBase).to.be.a('function');
@@ -55,7 +55,7 @@ describe('RestControllerBase', () => {
   });
   describe('Endpoints work correctly', () => {
     it('Create endpoint', (done) => {
-      axios.post('http://localhost:8082/api/mock', {
+      axios.post(`http://localhost:${MockConfigurationParameters.port}/api/mock`, {
         name: 'test'
       }, {
         validateStatus: () => true
@@ -69,7 +69,7 @@ describe('RestControllerBase', () => {
       }).catch(done);
     });
     it('List endpoint', (done) => {
-      axios.get('http://localhost:8082/api/mock', {
+      axios.get(`http://localhost:${MockConfigurationParameters.port}/api/mock`, {
         validateStatus: () => true
       }).then((response) => {
         expect(response.status).to.equal(200);
@@ -79,7 +79,7 @@ describe('RestControllerBase', () => {
       }).catch(done);
     });
     it('View endpoint', (done) => {
-      axios.get('http://localhost:8082/api/mock/1', {
+      axios.get(`http://localhost:${MockConfigurationParameters.port}/api/mock/1`, {
         validateStatus: () => true
       }).then((response) => {
         expect(response.status).to.equal(200);
@@ -91,15 +91,15 @@ describe('RestControllerBase', () => {
       }).catch(done);
     });
     it('Delete endpoint', (done) => {
-      axios.delete('http://localhost:8082/api/mock/1', {
+      axios.delete(`http://localhost:${MockConfigurationParameters.port}/api/mock/1`, {
         validateStatus: () => true
       }).then((response) => {
         expect(response.status).to.equal(200);
-        axios.get('http://localhost:8082/api/mock/1', {
+        axios.get(`http://localhost:${MockConfigurationParameters.port}/api/mock/1`, {
           validateStatus: () => true
         }).then((response) => {
           expect(response.status).to.equal(404);
-          axios.get('http://localhost:8082/api/mock', {
+          axios.get(`http://localhost:${MockConfigurationParameters.port}/api/mock`, {
             validateStatus: () => true
           }).then((response) => {
             expect(response.status).to.equal(200);
@@ -112,7 +112,7 @@ describe('RestControllerBase', () => {
     });
   });
   after(async () => {
-    KoalApp.getInstance().stop();
+    await KoalApp.getInstance().stop();
     await KoalApp.resetInstance();
     restoreConsole();
   });

@@ -8,7 +8,7 @@
     "kool-koala": "./bin/kool-koala.js"
   },
   "scripts": {
-    "gulp": "gulp",
+    "gulp": "gulp --gulpfile build/gulpfile.ts",
     "dev": "gulp --gulpfile build/gulpfile.ts dev",
     "compile": "gulp --gulpfile build/gulpfile.ts compile",
     "compile-release": "gulp --gulpfile build/gulpfile.ts compile-release",

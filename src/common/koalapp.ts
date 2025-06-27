@@ -75,6 +75,8 @@ export class KoalApp<
       console.log("Authorization header parser initialized.");
       this.koa.use(bodyParser());
       console.log("Body parser initialized.");
+      this.registerMiddlewaresFromConfiguration();
+      console.log("Middlewares registered from configuration.");
       this.registerEndpoints();
       console.log("Endpoints registered.");
       this.registerStaticFileServerMiddleware();
@@ -97,6 +99,15 @@ export class KoalApp<
     this.koa.use(transactionMiddleware);
   }
 
+  registerEndpoints() {
+    this.routerService = new RouterService(
+      this.configuration.getControllers()
+    );
+    this.koa
+      .use(this.routerService.getRoutes())
+      .use(this.routerService.allowedMethods());
+  }
+
   registerStaticFileServerMiddleware() {
     if (!this.configuration.getStaticFilesConfiguration()) {
       return;
@@ -106,10 +117,9 @@ export class KoalApp<
       console.log(`Serving files from: ${staticFilesPath}`);
       this.koa.use(serve(staticFilesPath));
       this.koa.use(async (ctx, next) => {
-        console.log(`Request received for static file: ${ctx.request.path}`);
         const requestPath = ctx.request.path;
 
-        if (!requestPath.startsWith(this.configuration.getRestPrefix()) && !/\.[a-z]+$/.test(requestPath)) {
+        if (!requestPath.startsWith(this.configuration.getRestPrefix()) && /\.[a-z]+$/.test(requestPath)) {
           ctx.type = staticFilesConfig.defaultFileMimeType ?? 'html';
           ctx.body = fs.createReadStream(path.join(staticFilesPath, staticFilesConfig.defaultFile ?? 'index.html'));
         } else {
@@ -119,13 +129,10 @@ export class KoalApp<
     }
   }
 
-  registerEndpoints() {
-    this.routerService = new RouterService(
-      this.configuration.getControllers()
-    );
-    this.koa
-      .use(this.routerService.getRoutes())
-      .use(this.routerService.allowedMethods());
+  registerMiddlewaresFromConfiguration() {
+    for (const middleware of this.configuration.getMiddlewares() || []) {
+      this.koa.use(middleware);
+    }
   }
 
   async start(callback?: (configuration: Configuration<U, P>) => void) {

@@ -42,4 +42,7 @@ export class Configuration<
   getStaticFilesConfiguration() {
     return this.parameters.staticFiles;
   }
+  getMiddlewares() {
+    return this.parameters.middlewares;
+  }
 }

@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/kukko/kool-koala/compare/v1.6.2...v1.7.0) (2025-06-27)
+
+
+### Bug Fixes
+
+* **test:** add test for serving images from static folders ([9ff7c5c](https://github.com/kukko/kool-koala/commit/9ff7c5c45e31946227e7a917db90f0923b2075e3))
+
+
+### Features
+
+* **server:** make possible to add middlewares for application ([8de96be](https://github.com/kukko/kool-koala/commit/8de96be760dab201abab2d9b93e9444607a67ad9))
+
 ## [1.6.2](https://github.com/kukko/kool-koala/compare/v1.6.1...v1.6.2) (2025-06-26)
 
 

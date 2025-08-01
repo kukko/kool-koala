@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/kukko/kool-koala/compare/v1.7.1...v1.7.2) (2025-08-01)
+
+
+### Bug Fixes
+
+* **debug:** remove unnecessary logging ([5eaab86](https://github.com/kukko/kool-koala/commit/5eaab860ba4077f88b17e1fc68a6477c37fde68c))
+
 ## [1.7.1](https://github.com/kukko/kool-koala/compare/v1.7.0...v1.7.1) (2025-08-01)
 
 

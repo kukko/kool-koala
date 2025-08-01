@@ -119,7 +119,6 @@ export class KoalApp<
         const staticFilesPath = path.isAbsolute(staticFilesConfig.folder)
           ? staticFilesConfig.folder
           : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
-        console.log(`Checking static files in: ${staticFilesPath}`);
 
         const filePath = path.join(staticFilesPath, requestPath);
 

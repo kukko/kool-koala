@@ -17,7 +17,7 @@ class MockController extends ControllerBase {
   registerEndpoints(): void {
     this.router.get('/testingMiddleware', async (context: ParameterizedContext<MockState>, next) => {
       context.body = context.state.middlewareTest;
-      await next();
+      context.status = StatusCode.OK;
     });
   }
 }
@@ -29,7 +29,7 @@ describe('KoalApp', () => {
   describe('Works as expected', () => {
     let koalApp: KoalApp<AuthenticableEntity, {}> | undefined;
     before(() => {
-      //mockConsole();
+      mockConsole();
     })
     describe('Without middlewares', () => {
       before((done) => {
@@ -127,7 +127,7 @@ describe('KoalApp', () => {
     });
 
     after(async () => {
-      //restoreConsole();
+      restoreConsole();
     });
   });
 });

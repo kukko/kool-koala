@@ -7,7 +7,6 @@ import { StatusCode } from './status-code';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'koa-bodyparser';
 import { BaseResponse, ErrorBase } from '../types';
-import serve from "koa-static";
 import path from "path";
 import fs from "fs";
 import { AuthorizationService } from '../services';
@@ -109,24 +108,54 @@ export class KoalApp<
   }
 
   registerStaticFileServerMiddleware() {
-    if (!this.configuration.getStaticFilesConfiguration()) {
-      return;
-    }
-    for (const staticFilesConfig of this.configuration.getStaticFilesConfiguration()) {
-      const staticFilesPath = path.isAbsolute(staticFilesConfig.folder) ? staticFilesConfig.folder : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
-      console.log(`Serving files from: ${staticFilesPath}`);
-      this.koa.use(serve(staticFilesPath));
-      this.koa.use(async (ctx, next) => {
-        const requestPath = ctx.request.path;
+    const configs = this.configuration.getStaticFilesConfiguration();
+    if (!configs) return;
 
-        if (!requestPath.startsWith(this.configuration.getRestPrefix()) && /\.[a-z]+$/.test(requestPath)) {
-          ctx.type = staticFilesConfig.defaultFileMimeType ?? 'html';
-          ctx.body = fs.createReadStream(path.join(staticFilesPath, staticFilesConfig.defaultFile ?? 'index.html'));
-        } else {
-          await next();
+    this.koa.use(async (ctx: Context, next: () => Promise<void>) => {
+      const requestPath = ctx.request.path.replace(/^\//, "");
+      let fileServed = false;
+
+      for (const staticFilesConfig of configs) {
+        const staticFilesPath = path.isAbsolute(staticFilesConfig.folder)
+          ? staticFilesConfig.folder
+          : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
+        console.log(`Checking static files in: ${staticFilesPath}`);
+
+        const filePath = path.join(staticFilesPath, requestPath);
+
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+          ctx.type = path.extname(filePath).slice(1) || "application/octet-stream";
+          const stat = fs.statSync(filePath);
+          ctx.set("Content-Length", stat.size.toString());
+          ctx.body = fs.createReadStream(filePath);
+          fileServed = true;
+          break;
         }
-      });
-    }
+      }
+
+      if (!fileServed) {
+        for (const staticFilesConfig of configs) {
+          const staticFilesPath = path.isAbsolute(staticFilesConfig.folder)
+            ? staticFilesConfig.folder
+            : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
+          const defaultFile = staticFilesConfig.defaultFile ?? "index.html";
+          const defaultFilePath = path.join(staticFilesPath, defaultFile);
+
+          if (fs.existsSync(defaultFilePath) && fs.statSync(defaultFilePath).isFile()) {
+            ctx.type = staticFilesConfig.defaultFileMimeType ?? "text/html";
+            const stat = fs.statSync(defaultFilePath);
+            ctx.set("Content-Length", stat.size.toString());
+            ctx.body = fs.createReadStream(defaultFilePath);
+            fileServed = true;
+            break;
+          }
+        }
+      }
+
+      if (!fileServed) {
+        await next();
+      }
+    });
   }
 
   registerMiddlewaresFromConfiguration() {

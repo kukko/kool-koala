@@ -73,7 +73,6 @@
     "koa": "^2.16.0",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
-    "koa-static": "^5.0.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.22",
     "yargs": "^17.7.2"

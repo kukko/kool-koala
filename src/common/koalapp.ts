@@ -7,7 +7,6 @@ import { StatusCode } from './status-code';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'koa-bodyparser';
 import { BaseResponse, ErrorBase } from '../types';
-import serve from "koa-static";
 import path from "path";
 import fs from "fs";
 import { AuthorizationService } from '../services';

@@ -1,3 +1,11 @@
+## [1.7.1](https://github.com/kukko/kool-koala/compare/v1.7.0...v1.7.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* **dependencies:** remove koa-static from the dependencies ([9a9bbcb](https://github.com/kukko/kool-koala/commit/9a9bbcb3ee51be7ac8cdcd548ab037a62a313c11))
+* **static-files:** make possible to serve static files from multiple folders ([6f5c611](https://github.com/kukko/kool-koala/commit/6f5c611e212e5a1d7cba27e6e83239179c094700))
+
 # [1.7.0](https://github.com/kukko/kool-koala/compare/v1.6.2...v1.7.0) (2025-06-27)
 
 

@@ -68,7 +68,17 @@ describe('KoalApp', () => {
             done();
           }).catch(done);
         });
-        it('Serves default file', (done) => {
+        it('Serves default file when no file requested', (done) => {
+          axios.get(`http://localhost:${MockConfigurationParameters.port}/`, {
+            validateStatus: () => true
+          }).then((response) => {
+            expect(response.status).to.equal(StatusCode.OK);
+            expect(response.headers['content-type']).to.equal('text/html; charset=utf-8');
+            expect(response.data.length).to.equal(fs.statSync(join(__dirname, '../assets/index.html')).size);
+            done();
+          }).catch(done);
+        });
+        it('Serves default file when requested file not found', (done) => {
           axios.get(`http://localhost:${MockConfigurationParameters.port}/koala.jpg`, {
             validateStatus: () => true
           }).then((response) => {

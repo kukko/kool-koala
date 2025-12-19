@@ -1,12 +1,20 @@
-import { DeleteResult, FindManyOptions, FindOneOptions, FindOptionsRelations, FindOptionsWhere } from "typeorm";
+import {
+  DeleteResult,
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsRelations,
+  FindOptionsWhere,
+} from "typeorm";
 import { RepositoryBase } from "./repository-base";
 import { SoftDeletable } from "../entities";
 import { IdentifiableEntity } from "../../types";
 
-export abstract class SoftDeletableRepositoryBase<T extends IdentifiableEntity & SoftDeletable> extends RepositoryBase<T> {
+export abstract class SoftDeletableRepositoryBase<
+  T extends IdentifiableEntity & SoftDeletable
+> extends RepositoryBase<T> {
   override getAll(withDeleted: boolean = false) {
     return this.getRepository().find({
-      withDeleted
+      withDeleted,
     });
   }
 
@@ -15,40 +23,54 @@ export abstract class SoftDeletableRepositoryBase<T extends IdentifiableEntity &
     return super.getWhere(options);
   }
 
-  override getOneWhere(options: FindOneOptions<T>, withDeleted: boolean = false) {
+  override getOneWhere(
+    options: FindOneOptions<T>,
+    withDeleted: boolean = false
+  ) {
     options.withDeleted = withDeleted;
     return super.getOneWhere(options);
   }
 
-  override getById(id: number, relations?: FindOptionsRelations<T>, withDeleted: boolean = false) {
+  override getById(
+    id: number,
+    relations?: FindOptionsRelations<T>,
+    withDeleted: boolean = false
+  ) {
     return this.getRepository().findOne(<FindOneOptions<T>>{
       where: {
-        id
+        id,
       },
       relations,
-      withDeleted
+      withDeleted,
     });
   }
 
   override delete(entity: T, hardDelete: boolean = false) {
     if (!hardDelete) {
       return this.getRepository().softDelete(entity.id);
-    }
-    else {
+    } else {
       return this.getRepository().delete(entity.id);
     }
   }
 
-  override deleteWhere(where?: FindOptionsWhere<T>, hardDelete: boolean = false) {
+  override deleteWhere(
+    where?: FindOptionsWhere<T>,
+    hardDelete: boolean = false
+  ) {
     if (!hardDelete) {
       return this.getRepository().softDelete(where);
-    }
-    else {
+    } else {
       return this.getRepository().delete(where);
     }
   }
 
-  override deleteAll(hardDelete: boolean = false): Promise<DeleteResult> {
-    return this.deleteWhere({}, hardDelete);
+  override deleteAll(
+    hardDelete: boolean = false
+  ): Promise<DeleteResult> | Promise<void> {
+    if (!hardDelete) {
+      return this.getRepository().deleteAll();
+    } else {
+      return this.getRepository().clear();
+    }
   }
 }

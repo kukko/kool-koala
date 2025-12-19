@@ -1,25 +1,22 @@
-import Koa, { Next } from 'koa';
-import { Configuration } from './configuration';
-import { RouterService } from '../services/router-service';
-import { AuthenticableEntity } from '../types/entities/authenticable-entity';
-import { DataSource } from 'typeorm';
-import { StatusCode } from './status-code';
-import jwt from 'jsonwebtoken';
-import bodyParser from 'koa-bodyparser';
-import { BaseResponse, ErrorBase } from '../types';
+import Koa, { Next } from "koa";
+import { Configuration } from "./configuration";
+import { RouterService } from "../services/router-service";
+import { AuthenticableEntity } from "../types/entities/authenticable-entity";
+import { DataSource } from "typeorm";
+import { StatusCode } from "./status-code";
+import jwt from "jsonwebtoken";
+import bodyParser from "koa-bodyparser";
+import { BaseResponse, ErrorBase } from "../types";
 import path from "path";
 import fs from "fs";
-import { AuthorizationService } from '../services';
-import { StringEnum } from '../types/common/string-enum';
-import { errorHandlerMiddleware } from '../middlewares/error-handler-middleware';
-import { transactionMiddleware } from '../middlewares/transaction-middleware';
-import { Server } from 'http';
-import { Context } from '../types/common/context';
+import { AuthorizationService } from "../services";
+import { StringEnum } from "../types/common/string-enum";
+import { errorHandlerMiddleware } from "../middlewares/error-handler-middleware";
+import { transactionMiddleware } from "../middlewares/transaction-middleware";
+import { Server } from "http";
+import { Context } from "../types/common/context";
 
-export class KoalApp<
-  U extends AuthenticableEntity,
-  P extends StringEnum
-> {
+export class KoalApp<U extends AuthenticableEntity, P extends StringEnum> {
   private static instance: KoalApp<any, any>;
 
   private koa = new Koa();
@@ -30,8 +27,7 @@ export class KoalApp<
 
   private authorizationService: AuthorizationService<U, P>;
 
-  private constructor(private configuration: Configuration<U, P>) {
-  }
+  private constructor(private configuration: Configuration<U, P>) {}
 
   public static getInstance<
     T extends AuthenticableEntity,
@@ -82,12 +78,14 @@ export class KoalApp<
       console.log("Static file server initialized.");
     } catch (error) {
       console.log("Error during database initialization...", error);
-      throw new Error('Error during application intialization...');
+      throw new Error("Error during application intialization...");
     }
   }
   async setupDatabaseConnection() {
     if (this.configuration.getDatabase()) {
-      this.databaseConnection = await this.configuration.getDatabase().dataSource.initialize();
+      this.databaseConnection = await this.configuration
+        .getDatabase()
+        .dataSource.initialize();
       await this.databaseConnection.runMigrations();
     }
   }
@@ -99,9 +97,7 @@ export class KoalApp<
   }
 
   registerEndpoints() {
-    this.routerService = new RouterService(
-      this.configuration.getControllers()
-    );
+    this.routerService = new RouterService(this.configuration.getControllers());
     this.koa
       .use(this.routerService.getRoutes())
       .use(this.routerService.allowedMethods());
@@ -118,17 +114,38 @@ export class KoalApp<
       for (const staticFilesConfig of configs) {
         const staticFilesPath = path.isAbsolute(staticFilesConfig.folder)
           ? staticFilesConfig.folder
-          : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
+          : path.join(
+              path.dirname(require.main.filename),
+              staticFilesConfig.folder
+            );
 
         const filePath = path.join(staticFilesPath, requestPath);
 
         if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-          ctx.type = path.extname(filePath).slice(1) || "application/octet-stream";
+          ctx.type =
+            path.extname(filePath).slice(1) || "application/octet-stream";
           const stat = fs.statSync(filePath);
           ctx.set("Content-Length", stat.size.toString());
           ctx.body = fs.createReadStream(filePath);
           fileServed = true;
           break;
+        }
+
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+          const defaultFile = staticFilesConfig.defaultFile ?? "index.html";
+          const indexFilePath = path.join(filePath, defaultFile);
+
+          if (
+            fs.existsSync(indexFilePath) &&
+            fs.statSync(indexFilePath).isFile()
+          ) {
+            ctx.type = staticFilesConfig.defaultFileMimeType ?? "text/html";
+            const stat = fs.statSync(indexFilePath);
+            ctx.set("Content-Length", stat.size.toString());
+            ctx.body = fs.createReadStream(indexFilePath);
+            fileServed = true;
+            break;
+          }
         }
       }
 
@@ -136,11 +153,17 @@ export class KoalApp<
         for (const staticFilesConfig of configs) {
           const staticFilesPath = path.isAbsolute(staticFilesConfig.folder)
             ? staticFilesConfig.folder
-            : path.join(path.dirname(require.main.filename), staticFilesConfig.folder);
+            : path.join(
+                path.dirname(require.main.filename),
+                staticFilesConfig.folder
+              );
           const defaultFile = staticFilesConfig.defaultFile ?? "index.html";
           const defaultFilePath = path.join(staticFilesPath, defaultFile);
 
-          if (fs.existsSync(defaultFilePath) && fs.statSync(defaultFilePath).isFile()) {
+          if (
+            fs.existsSync(defaultFilePath) &&
+            fs.statSync(defaultFilePath).isFile()
+          ) {
             ctx.type = staticFilesConfig.defaultFileMimeType ?? "text/html";
             const stat = fs.statSync(defaultFilePath);
             ctx.set("Content-Length", stat.size.toString());
@@ -177,14 +200,12 @@ export class KoalApp<
         this.server.close((error) => {
           if (!error) {
             resolve();
-          }
-          else {
+          } else {
             reject();
           }
         });
         this.server = undefined;
-      }
-      else {
+      } else {
         reject();
       }
     });
@@ -193,19 +214,20 @@ export class KoalApp<
   async authorizationHeaderParser(context: Context, next: Next) {
     const authHeader = context.headers.authorization;
     if (authHeader) {
-      const token = authHeader.split(' ')[1];
+      const token = authHeader.split(" ")[1];
       try {
-        context.state.user = <AuthenticableEntity>jwt.verify(token, this.configuration.getJwtParameters().secretKey);
+        context.state.user = <AuthenticableEntity>(
+          jwt.verify(token, this.configuration.getJwtParameters().secretKey)
+        );
         await next();
       } catch (error) {
         context.status = StatusCode.UNAUTHORIZED;
         context.body = {
           success: false,
-          message: 'Invalid token'
-        }
+          message: "Invalid token",
+        };
       }
-    }
-    else {
+    } else {
       await next();
     }
   }
@@ -218,14 +240,13 @@ export class KoalApp<
         context.status = error.getStatusCode();
         context.body = <BaseResponse>{
           success: false,
-          message: error.message
+          message: error.message,
         };
-      }
-      else {
+      } else {
         console.log(error);
         context.status = StatusCode.INTERNAL_SERVER_ERROR;
         context.body = <BaseResponse>{
-          success: false
+          success: false,
         };
       }
     }

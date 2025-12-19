@@ -1,3 +1,11 @@
+## [1.7.3](https://github.com/kukko/kool-koala/compare/v1.7.2...v1.7.3) (2025-12-19)
+
+
+### Bug Fixes
+
+* **repository:** delete all records with built in methods ([e48e9f6](https://github.com/kukko/kool-koala/commit/e48e9f6908212c3cd0840b63be9414299a0de1b6))
+* **static:** serve static files from subfolders also ([3f27685](https://github.com/kukko/kool-koala/commit/3f276856c848d81a6b5b28e240f2c112b0900177))
+
 ## [1.7.2](https://github.com/kukko/kool-koala/compare/v1.7.1...v1.7.2) (2025-08-01)
 
 

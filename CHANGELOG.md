@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/kukko/kool-koala/compare/v1.7.3...v1.8.0) (2026-01-14)
+
+
+### Features
+
+* **repository:** make possible to get column name from property name ([8446bf5](https://github.com/kukko/kool-koala/commit/8446bf52029deaf7ee460a521f643e2a8f91d667))
+
 ## [1.7.3](https://github.com/kukko/kool-koala/compare/v1.7.2...v1.7.3) (2025-12-19)
 
 

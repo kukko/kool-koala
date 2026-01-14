@@ -57,4 +57,10 @@ export abstract class RepositoryBase<T extends IdentifiableEntity> {
   deleteAll(): Promise<DeleteResult> | Promise<void> {
     return this.getRepository().deleteAll();
   }
+  createQueryBuilder<R = T>() {
+    return this.getRepository().createQueryBuilder();
+  }
+  getColumnNameFromProperty(propertyName: keyof T): string {
+    return this.getRepository().metadata.findColumnWithPropertyName(propertyName as string).databaseName;
+  }
 }

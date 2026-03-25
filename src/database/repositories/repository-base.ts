@@ -20,7 +20,7 @@ export abstract class RepositoryBase<T extends IdentifiableEntity> {
         .getRepository(this.getEntityType());
     } else {
       this._repository = queryRunner.manager.getRepository(
-        this.getEntityType()
+        this.getEntityType(),
       );
     }
   }
@@ -45,6 +45,9 @@ export abstract class RepositoryBase<T extends IdentifiableEntity> {
       relations,
     });
   }
+  countWhere(options: FindManyOptions<T>) {
+    return this._repository.count(options);
+  }
   save(entity: T | DeepPartial<T>) {
     return this.getRepository().save(entity);
   }
@@ -61,6 +64,8 @@ export abstract class RepositoryBase<T extends IdentifiableEntity> {
     return this.getRepository().createQueryBuilder();
   }
   getColumnNameFromProperty(propertyName: keyof T): string {
-    return this.getRepository().metadata.findColumnWithPropertyName(propertyName as string).databaseName;
+    return this.getRepository().metadata.findColumnWithPropertyName(
+      propertyName as string,
+    ).databaseName;
   }
 }

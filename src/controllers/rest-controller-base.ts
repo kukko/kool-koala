@@ -9,26 +9,41 @@ export abstract class RestControllerBase<
   T extends IdentifiableEntity,
   RouteType extends { [J in keyof RouteType]: string },
   PermissionType extends { [K in keyof PermissionType]: string },
-  CreateRequest extends any = Omit<T, 'id'>,
-  EditRequest = T
+  CreateRequest extends any = Omit<T, "id">,
+  EditRequest = T,
 > extends ControllerBase {
   abstract getEndpoint(): RouteType[keyof RouteType];
-  abstract getRepository(): RepositoryBase<T>;
+  abstract getRepository(context: Context): RepositoryBase<T>;
   registerEndpoints(): void {
     if (this.shouldRegisterListEndpoint()) {
-      this.router.get(this.getApiUrl(this.getEndpoint()), this.listEntities.bind(this));
+      this.router.get(
+        this.getApiUrl(this.getEndpoint()),
+        this.listEntities.bind(this),
+      );
     }
     if (this.shouldRegisterViewEndpoint()) {
-      this.router.get(this.getApiUrl(`${this.getEndpoint()}/:id`), this.viewEntity.bind(this));
+      this.router.get(
+        this.getApiUrl(`${this.getEndpoint()}/:id`),
+        this.viewEntity.bind(this),
+      );
     }
     if (this.shouldRegisterCreateEndpoint()) {
-      this.router.post(this.getApiUrl(this.getEndpoint()), this.createEntity.bind(this));
+      this.router.post(
+        this.getApiUrl(this.getEndpoint()),
+        this.createEntity.bind(this),
+      );
     }
     if (this.shouldRegisterEditEndpoint()) {
-      this.router.put(this.getApiUrl(`${this.getEndpoint()}/:id`), this.editEntity.bind(this));
+      this.router.put(
+        this.getApiUrl(`${this.getEndpoint()}/:id`),
+        this.editEntity.bind(this),
+      );
     }
     if (this.shouldRegisterDeleteEndpoint()) {
-      this.router.delete(this.getApiUrl(`${this.getEndpoint()}/:id`), this.deleteEntity.bind(this));
+      this.router.delete(
+        this.getApiUrl(`${this.getEndpoint()}/:id`),
+        this.deleteEntity.bind(this),
+      );
     }
   }
   protected getAuthorizationService() {
@@ -36,86 +51,110 @@ export abstract class RestControllerBase<
   }
   async listEntities(context: Context): Promise<void> {
     if (this.getListPermission() !== undefined) {
-      await this.getAuthorizationService().userHasRight(context.state.user, this.getListPermission());
+      await this.getAuthorizationService().userHasRight(
+        context.state.user,
+        this.getListPermission(),
+      );
     }
     context.body = await this.getEntities(context);
   }
   async viewEntity(context: Context): Promise<void> {
     if (this.getViewPermission() !== undefined) {
-      await this.getAuthorizationService().userHasRight(context.state.user, this.getViewPermission());
+      await this.getAuthorizationService().userHasRight(
+        context.state.user,
+        this.getViewPermission(),
+      );
     }
     const entity = await this.getById(context);
     if (entity) {
       context.body = entity;
-    }
-    else {
+    } else {
       context.status = StatusCode.NOT_FOUND;
     }
   }
   async createEntity(context: Context): Promise<T> {
     if (this.getCreatePermission() !== undefined) {
-      await this.getAuthorizationService().userHasRight(context.state.user, this.getCreatePermission());
+      await this.getAuthorizationService().userHasRight(
+        context.state.user,
+        this.getCreatePermission(),
+      );
     }
-    const errorMessage = await this.entityCanBeCreated(context.request.body as CreateRequest);
+    const errorMessage = await this.entityCanBeCreated(
+      context.request.body as CreateRequest,
+    );
     if (errorMessage !== null) {
       throw new ErrorBase(errorMessage, StatusCode.BAD_REQUEST);
     }
-    const entity = await this.getRepository().save(await this.modifyEntityForCreate(context.request.body as CreateRequest));
+    const entity = await this.getRepository(context).save(
+      await this.modifyEntityForCreate(context.request.body as CreateRequest),
+    );
     context.status = StatusCode.CREATED;
     context.body = {
       success: true,
-      entity
+      entity,
     };
     return entity;
   }
   async editEntity(context: Context): Promise<void> {
     if (this.getEditPermission() !== undefined) {
-      await this.getAuthorizationService().userHasRight(context.state.user, this.getEditPermission());
+      await this.getAuthorizationService().userHasRight(
+        context.state.user,
+        this.getEditPermission(),
+      );
     }
     const entity = await this.getById(context);
     if (entity) {
-      const errorMessage = await this.entityCanBeEdited(entity, context.request.body as EditRequest);
+      const errorMessage = await this.entityCanBeEdited(
+        entity,
+        context.request.body as EditRequest,
+      );
       if (errorMessage !== null) {
         throw new ErrorBase(errorMessage, StatusCode.BAD_REQUEST);
       }
-      await this.getRepository().save(await this.modifyEntityForUpdate(entity, context.request.body as EditRequest));
-      context.status = StatusCode.OK
+      await this.getRepository(context).save(
+        await this.modifyEntityForUpdate(
+          entity,
+          context.request.body as EditRequest,
+        ),
+      );
+      context.status = StatusCode.OK;
       context.body = <BaseResponse>{
-        success: true
+        success: true,
       };
-    }
-    else {
+    } else {
       context.status = StatusCode.NOT_FOUND;
     }
   }
   async deleteEntity(context: Context) {
     if (this.getDeletePermission() !== undefined) {
-      await this.getAuthorizationService().userHasRight(context.state.user, this.getDeletePermission());
+      await this.getAuthorizationService().userHasRight(
+        context.state.user,
+        this.getDeletePermission(),
+      );
     }
     const entity = await this.getById(context);
     if (entity) {
-      const errorMessage = await this.entityCanBeDeleted(entity)
+      const errorMessage = await this.entityCanBeDeleted(entity);
       if (errorMessage !== null) {
         throw new ErrorBase(errorMessage, StatusCode.BAD_REQUEST);
       }
-      await this.delete(entity);
+      await this.delete(entity, context);
       context.status = StatusCode.OK;
       context.body = <BaseResponse>{
-        success: true
+        success: true,
       };
-    }
-    else {
+    } else {
       context.status = StatusCode.NOT_FOUND;
     }
   }
-  protected async delete(entity: T) {
-    await this.getRepository().delete(entity);
+  protected async delete(entity: T, context: Context) {
+    await this.getRepository(context).delete(entity);
   }
   getEntities(context: Context): Promise<T[]> {
-    return this.getRepository().getAll();
+    return this.getRepository(context).getAll();
   }
   getById(context: Context): Promise<T> {
-    return this.getRepository().getById(context.params.id);
+    return this.getRepository(context).getById(context.params.id);
   }
 
   protected getListPermission(): PermissionType | undefined {
@@ -149,19 +188,29 @@ export abstract class RestControllerBase<
   protected shouldRegisterDeleteEndpoint(): boolean {
     return true;
   }
-  protected async entityCanBeCreated(body: CreateRequest): Promise<string | null> {
+  protected async entityCanBeCreated(
+    body: CreateRequest,
+  ): Promise<string | null> {
     return null;
   }
-  protected async entityCanBeEdited(entity: T, body: EditRequest): Promise<string | null> {
+  protected async entityCanBeEdited(
+    entity: T,
+    body: EditRequest,
+  ): Promise<string | null> {
     return null;
   }
   protected async entityCanBeDeleted(entity: T): Promise<string | null> {
     return null;
   }
-  protected async modifyEntityForCreate(body: CreateRequest): Promise<DeepPartial<T>> {
+  protected async modifyEntityForCreate(
+    body: CreateRequest,
+  ): Promise<DeepPartial<T>> {
     return body as DeepPartial<T>;
   }
-  protected async modifyEntityForUpdate(entity: T, body: EditRequest): Promise<T> {
+  protected async modifyEntityForUpdate(
+    entity: T,
+    body: EditRequest,
+  ): Promise<T> {
     return entity;
   }
 }

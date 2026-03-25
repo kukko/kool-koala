@@ -1,3 +1,11 @@
+# [1.9.0](https://github.com/kukko/kool-koala/compare/v1.8.0...v1.9.0) (2026-03-25)
+
+
+### Features
+
+* **controller:** pass context to get repository method ([3ab6ec1](https://github.com/kukko/kool-koala/commit/3ab6ec19c56673152c92273c862ab87a40e56164))
+* **repository:** create count method ([187dd27](https://github.com/kukko/kool-koala/commit/187dd27ce0505e44d79e5f5d8cd190892f451d2a))
+
 # [1.8.0](https://github.com/kukko/kool-koala/compare/v1.7.3...v1.8.0) (2026-01-14)
 
 
